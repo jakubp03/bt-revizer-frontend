@@ -1,21 +1,24 @@
-import { Button } from "@/components/ui/button"
+import { Outlet, Route, Routes } from "react-router-dom";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import AuthHandler from "./components/handlers/AuthHandler";
+import ProtectedRoute from "./components/handlers/ProtectedRoute";
 
-export function App() {
+export default function App() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
-  )
+    <AuthHandler> {/*provides acces to token and handles token auth*/}
+      <Routes>
+        <Route path="/login" element={<Login />} /> {/* login page where user gets redirected if not authorized */}
+        <Route path="/register" element={<Register />} />
+        <Route element={
+          <ProtectedRoute>
+            <Outlet /> {/* child components, all child components are nested inside of ProtectedRoute => SocketProvider => Layout*/}
+          </ProtectedRoute>
+        }>
+          {/*here are child components to be rendered inside of outlet */}
+          <Route path="/" element={<>the app</>} />
+        </Route>
+      </Routes>
+    </AuthHandler>
+  );
 }
-
-export default App
