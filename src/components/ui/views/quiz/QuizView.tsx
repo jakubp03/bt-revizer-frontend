@@ -1,7 +1,7 @@
+import api from '@/services/Api';
 import { useNavigate, useParams } from 'react-router-dom';
-import submitData from '../../../test_data/submit_quiz_50pct.json';
-import api from '../../services/Api';
-import { Button } from '../ui/button';
+import submitData from '../../../../../test_data/submit_quiz_50pct.json';
+import { Button } from '../../shadcn_ui/button';
 
 export default function QuizView() {
     const { id } = useParams<{ id: string }>();

@@ -2,16 +2,16 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/shadcn_ui/alert";
+import { Button } from "@/components/ui/shadcn_ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn_ui/card";
+import { Input } from "@/components/ui/shadcn_ui/input";
+import { Label } from "@/components/ui/shadcn_ui/label";
+import { Separator } from "@/components/ui/shadcn_ui/separator";
+import api from "@/services/Api";
+import { useAppDispatch } from "@/store/hooks";
+import { setToken, setUser } from "@/store/slices/authSlice";
 import { validateRegistrationInputs } from "@/utils/registerValidation";
-import api from "../../services/Api";
-import { useAppDispatch } from "../../store/hooks";
-import { setToken, setUser } from "../../store/slices/authSlice";
 
 /**
  * Register component that handles user registration.
