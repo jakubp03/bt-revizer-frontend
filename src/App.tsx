@@ -1,10 +1,10 @@
 import { Outlet, Route, Routes } from "react-router-dom";
-import Login from "./components/auth/Login";
-import Register from "./components/auth/Register";
 import AuthHandler from "./components/handlers/AuthHandler";
 import ProtectedRoute from "./components/handlers/ProtectedRoute";
-import QuizResultView from "./components/quiz/QuizResultView";
-import QuizView from "./components/quiz/QuizView";
+import Login from "./components/ui/views/auth/LoginView";
+import Register from "./components/ui/views/auth/RegisterView";
+import QuizResultView from "./components/ui/views/quiz/QuizResultView";
+import QuizView from "./components/ui/views/quiz/QuizView";
 import DefaultView from "./DefaultView";
 
 export default function App() {

@@ -1,10 +1,10 @@
+import type { QuizResultResponse } from '@/types/quiz';
 import { useLocation } from 'react-router-dom';
 import { Pie, PieChart } from 'recharts';
-import type { QuizResultResponse } from '../../types/quiz';
-import { Button } from '../ui/button';
-import { Card, CardContent } from '../ui/card';
-import { ChartContainer, type ChartConfig } from '../ui/chart';
-import { Separator } from '../ui/separator';
+import { Button } from '../../shadcn_ui/button';
+import { Card, CardContent } from '../../shadcn_ui/card';
+import { ChartContainer, type ChartConfig } from '../../shadcn_ui/chart';
+import { Separator } from '../../shadcn_ui/separator';
 
 const chartConfig = {
     correct: { label: 'Correct', color: 'var(--success)' },
