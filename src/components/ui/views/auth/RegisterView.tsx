@@ -30,7 +30,7 @@ import { validateRegistrationInputs } from "@/utils/registerValidation";
  * 
  * @returns {React.ReactElement} Registration form or feedback component
  */
-export default function Register() {
+export default function RegisterView() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isRegistrationSuccess, setIsRegistrationSuccess] = useState<boolean | null>(null);
     const [emailError, setEmailError] = useState(false);
