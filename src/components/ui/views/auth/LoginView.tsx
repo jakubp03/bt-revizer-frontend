@@ -21,7 +21,7 @@ import { setToken, setUser } from "@/store/slices/authSlice";
  * 
  * @returns {React.ReactElement} Login form component
  */
-export default function Login() {
+export default function LoginView() {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
     const [isLoginSuccess, setIsLoginSuccess] = useState<boolean | null>(null);
