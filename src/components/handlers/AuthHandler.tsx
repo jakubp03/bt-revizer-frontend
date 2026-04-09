@@ -6,6 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setToken, setUser, validateToken } from '../../store/slices/authSlice';
 
+let isRefreshing = false;
+let failedQueue: { resolve: (v: unknown) => void; reject: (e: unknown) => void }[] = [];
+
+const processQueue = (error: unknown, token: string | null = null) => {
+    failedQueue.forEach(p => error ? p.reject(error) : p.resolve(token));
+    failedQueue = [];
+};
+
 /**
  * AuthHandler component that manages authentication interceptors for API requests.
  * 
@@ -58,26 +66,34 @@ export default function AuthHandler({ children }: { children: React.ReactNode })
 
             //TODO: specific server replies should be stored in file as local variables or something like that
             if (error.response.status === 401 && error.response.data === "Invalid token EXPIRED" && !originalRequest._retry && !originalRequest.url?.includes('/auth/refresh')) {
-                originalRequest._retry = true; // Mark as retried before the attempt to prevent infinite loop
+                if (isRefreshing) {
+                    // Queue subsequent requests until refresh completes
+                    return new Promise((resolve, reject) => {
+                        failedQueue.push({ resolve, reject });
+                    }).then(token => {
+                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                        return api(originalRequest);
+                    }).catch(err => Promise.reject(err));
+                }
 
-                //we send new request to the server to get new access token 
+                originalRequest._retry = true;
+                isRefreshing = true;
+
                 try {
-                    const response = await api.post('/auth/refresh', {}, {
-                        withCredentials: true // Ensures refresh cookie is sent
-                    });
-
-                    dispatch(setToken(response.data.access_token));
-                    dispatch(setUser(response.data.access_token));
-                    navigate('/');
-
-                    originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
-
-                    //if successful then we retry the original request
+                    const response = await api.post('/auth/refresh', {}, { withCredentials: true });
+                    const newToken = response.data.access_token;
+                    dispatch(setToken(newToken));
+                    dispatch(setUser(newToken));
+                    processQueue(null, newToken);
+                    originalRequest.headers.Authorization = `Bearer ${newToken}`;
                     return api(originalRequest);
                 } catch (refreshError) {
+                    processQueue(refreshError, null);
                     dispatch(setToken(null));
                     dispatch(setUser(null));
                     return Promise.reject(refreshError);
+                } finally {
+                    isRefreshing = false;
                 }
             }
             return Promise.reject(error);
