@@ -16,15 +16,15 @@ export const validateToken = createAsyncThunk(
       if (!localStorage.getItem('accessToken')) {
         throw new Error("no token found in localstorage");
       }
-      
+
       const response = await api.get('/auth/validateToken');
       return response.data;
 
     } catch (error: unknown) {
       console.error("Error validating token", error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      const responseData = (error && typeof error === 'object' && 'response' in error) 
-        ? (error as { response?: { data?: unknown } }).response?.data 
+      const responseData = (error && typeof error === 'object' && 'response' in error)
+        ? (error as { response?: { data?: unknown } }).response?.data
         : undefined;
       return rejectWithValue(responseData || errorMessage);
     }
@@ -41,16 +41,16 @@ export const validateToken = createAsyncThunk(
  */
 export const handleLogout = createAsyncThunk(
   'auth/handleLogout',
-  async(_, {dispatch} ) =>{
-    
-    try{
+  async (_, { dispatch }) => {
+
+    try {
       await api.post('/auth/logout');
       dispatch(clearAuth());
-    }catch(error){
+    } catch (error) {
       console.error("logout error: " + error);
       dispatch(clearAuth());
     }
-}
+  }
 );
 
 const parseJWT = (token: string) => {
@@ -63,7 +63,7 @@ const parseJWT = (token: string) => {
       name: payload.name,
       uid: payload.uid
     };
-    
+
   } catch (error: unknown) {
     throw new Error("Error parsing JWT token: " + (error instanceof Error ? error.message : String(error)));
   }
@@ -134,7 +134,7 @@ const authSlice = createSlice({
     setToken: (state, action) => {
       const newToken = action.payload;
       state.token = newToken;
-      
+
       if (newToken) {
         localStorage.setItem('accessToken', newToken);
       } else {

@@ -1,8 +1,11 @@
 import logo from "@/assets/logo.svg";
 import { Separator } from "@/components/ui/shadcn_ui/separator";
 import { cn } from "@/lib/utils";
-import { FolderOpen, History, Home, Library, Plus } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchAllCategories } from "@/store/slices/categorySlice";
+import { FolderOpen, History, Home, Library, Loader2, Plus } from "lucide-react";
 import type { ReactNode } from "react";
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 type NavItem = {
@@ -17,11 +20,14 @@ const navItems: NavItem[] = [
     { label: "Library", icon: <Library size={20} />, href: "/library" },
 ];
 
-// Mock categories — replace with real data later
-const mockCategories = [{ id: "1", name: "Biology" }];
-
 export default function AppSidebar() {
     const location = useLocation();
+    const dispatch = useAppDispatch();
+    const { categoryCollection, isLoadingCategories } = useAppSelector(state => state.category);
+
+    useEffect(() => {
+        dispatch(fetchAllCategories());
+    }, [dispatch]);
 
     return (
         <aside className="flex h-screen w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground">
@@ -65,7 +71,11 @@ export default function AppSidebar() {
                     Your categories
                 </span>
 
-                {mockCategories.map((category) => (
+                {isLoadingCategories ? (
+                    <div className="flex items-center justify-center py-4">
+                        <Loader2 size={18} className="animate-spin text-muted-foreground" />
+                    </div>
+                ) : categoryCollection.map((category) => (
                     <Link
                         key={category.id}
                         to={`/category/${category.id}`}
