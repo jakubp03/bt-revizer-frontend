@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { enableMapSet } from 'immer';
 import authSlice from './slices/authSlice';
+import categorySlice from './slices/categorySlice';
 
 
 // Enable Immer's MapSet plugin to support Map and Set in Redux state
@@ -9,6 +10,7 @@ enableMapSet();
 export const store = configureStore({
   reducer: {
     auth: authSlice,
+    category: categorySlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

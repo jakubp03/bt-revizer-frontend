@@ -2,7 +2,6 @@
 // eslint-disable-next-line no-unused-vars
 import api from '@/services/Api';
 import React, { useLayoutEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setToken, setUser, validateToken } from '../../store/slices/authSlice';
 
@@ -30,7 +29,6 @@ const processQueue = (error: unknown, token: string | null = null) => {
  */
 // eslint-disable-next-line react/prop-types
 export default function AuthHandler({ children }: { children: React.ReactNode }) {
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { token } = useAppSelector(state => state.auth);
 
