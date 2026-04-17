@@ -1,42 +1,7 @@
 import type { Category } from '@/types/category';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import api from '../../services/Api';
-
-export const fetchAllCategories = createAsyncThunk(
-    'category/allCategories',
-    async (_, { rejectWithValue }) => {
-        try {
-            const response = await api.get('/category');
-            return response.data;
-
-        } catch (error: unknown) {
-            console.error("Error fetching categories", error);
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const responseData = (error && typeof error === 'object' && 'response' in error)
-                ? (error as { response?: { data?: unknown } }).response?.data
-                : undefined;
-            return rejectWithValue(responseData || errorMessage);
-        }
-    }
-);
-
-export const createCategory = createAsyncThunk(
-    'category/createCategory',
-    async ({ name, description, color }: { name: string, description: string, color: string }, { rejectWithValue }) => {
-        try {
-            const response = await api.post('/category', { name, description, color });
-            return response.data;
-
-        } catch (error: unknown) {
-            console.error("Error creating category", error);
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            const responseData = (error && typeof error === 'object' && 'response' in error)
-                ? (error as { response?: { data?: unknown } }).response?.data
-                : undefined;
-            return rejectWithValue(responseData || errorMessage);
-        }
-    }
-);
+import { createSlice } from '@reduxjs/toolkit';
+import { createCategory, fetchAllCategories } from '../thunks/categoryThunks';
+export { createCategory, fetchAllCategories } from '../thunks/categoryThunks';
 
 
 type CategorySliceState = {
@@ -53,13 +18,8 @@ const categorySlice = createSlice({
     name: 'category',
     initialState,
     reducers: {
-        addCategory: (state, action) => {
-            state.categoryCollection.push({
-                id: action.payload.id,
-                name: action.payload.name,
-                description: action.payload.description,
-                color: action.payload.color,
-            })
+        addCategory: (state, action: { payload: Category }) => {
+            state.categoryCollection.push(action.payload)
         },
         setIsLoadingCategories: (state, action) => {
             state.isLoadingCategories = action.payload
@@ -85,3 +45,6 @@ const categorySlice = createSlice({
 });
 
 export default categorySlice.reducer;
+
+export const selectCategoryById = (id: string) => (state: { category: CategorySliceState }) =>
+    state.category.categoryCollection.find(category => category.id === id);

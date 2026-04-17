@@ -1,10 +1,13 @@
 import { Outlet, Route, Routes } from "react-router-dom";
 import AuthHandler from "./components/handlers/AuthHandler";
+import InitializationHandler from "./components/handlers/InitializationHandler";
 import ProtectedRoute from "./components/handlers/ProtectedRoute";
 import Layout from "./components/ui/Layout";
 import LoginView from "./components/ui/views/auth/LoginView";
 import RegisterView from "./components/ui/views/auth/RegisterView";
 import HomeView from "./components/ui/views/HomeView";
+import LibraryView from "./components/ui/views/library/LibraryView";
+import QuizDetailView from "./components/ui/views/quiz/QuizDetailView";
 import QuizResultView from "./components/ui/views/quiz/QuizResultView";
 import QuizView from "./components/ui/views/quiz/QuizView";
 
@@ -16,14 +19,18 @@ export default function App() {
         <Route path="/register" element={<RegisterView />} />
         <Route element={
           <ProtectedRoute>
-            <Layout>
-              <Outlet /> {/* child components, all child components are nested inside of ProtectedRoute => SocketProvider => Layout*/}
-            </Layout>
+            <InitializationHandler>
+              <Layout>
+                <Outlet /> {/* child components, all child components are nested inside of ProtectedRoute => SocketProvider => Layout*/}
+              </Layout>
+            </InitializationHandler>
           </ProtectedRoute>
         }>
           {/*here are child components to be rendered inside of outlet */}
           <Route path="/" element={<HomeView />} />
-          <Route path="/quiz/:id" element={<QuizView />} />
+          <Route path="/library" element={<LibraryView />} />
+          <Route path="/quiz/:id" element={<QuizDetailView />} />
+          <Route path="/quiz/:id/play" element={<QuizView />} />
           <Route path="/quiz/:id/results/:attemptId" element={<QuizResultView />} />
         </Route>
       </Routes>
