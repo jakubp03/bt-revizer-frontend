@@ -1,12 +1,11 @@
 import logo from "@/assets/logo.svg";
 import { Separator } from "@/components/ui/shadcn_ui/separator";
 import { cn } from "@/lib/utils";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchAllCategories } from "@/store/slices/categorySlice";
-import { FolderOpen, History, Home, Library, Loader2, Plus } from "lucide-react";
+import { useAppSelector } from "@/store/hooks";
+import { FolderOpen, History, Home, Library, Plus } from "lucide-react";
 import type { ReactNode } from "react";
-import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import LoadingSpinnerSmall from "../shared/LoadingSpinnerSmall";
 
 type NavItem = {
     label: string;
@@ -22,12 +21,7 @@ const navItems: NavItem[] = [
 
 export default function AppSidebar() {
     const location = useLocation();
-    const dispatch = useAppDispatch();
     const { categoryCollection, isLoadingCategories } = useAppSelector(state => state.category);
-
-    useEffect(() => {
-        dispatch(fetchAllCategories());
-    }, [dispatch]);
 
     return (
         <aside className="flex h-screen w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground">
@@ -72,9 +66,7 @@ export default function AppSidebar() {
                 </span>
 
                 {isLoadingCategories ? (
-                    <div className="flex items-center justify-center py-4">
-                        <Loader2 size={18} className="animate-spin text-muted-foreground" />
-                    </div>
+                    <LoadingSpinnerSmall />
                 ) : categoryCollection.map((category) => (
                     <Link
                         key={category.id}
@@ -86,7 +78,7 @@ export default function AppSidebar() {
                                 : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                         )}
                     >
-                        <FolderOpen size={20} />
+                        <FolderOpen color={category.color !== null ? category.color : "#FFFFFF"} size={20} />
                         {category.name}
                     </Link>
                 ))}
