@@ -25,7 +25,7 @@ export default function QuizCard({ quiz }: { quiz: Quiz }) {
                     <Link
                         to={`/quiz/${quiz.id}/play`}
                         onClick={(e) => e.stopPropagation()}
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground hover:cursor-pointer"
                     >
                         <Play size={16} fill="currentColor" />
                     </Link>

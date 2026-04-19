@@ -20,18 +20,19 @@ export default function App() {
         <Route element={
           <ProtectedRoute>
             <InitializationHandler>
-              <Layout>
-                <Outlet /> {/* child components, all child components are nested inside of ProtectedRoute => SocketProvider => Layout*/}
-              </Layout>
+              <Outlet />
             </InitializationHandler>
           </ProtectedRoute>
         }>
-          {/*here are child components to be rendered inside of outlet */}
-          <Route path="/" element={<HomeView />} />
-          <Route path="/library" element={<LibraryView />} />
-          <Route path="/quiz/:id" element={<QuizDetailView />} />
+          {/* Routes WITH sidebar layout */}
+          <Route element={<Layout><Outlet /></Layout>}>
+            <Route path="/" element={<HomeView />} />
+            <Route path="/library" element={<LibraryView />} />
+            <Route path="/quiz/:id" element={<QuizDetailView />} />
+            <Route path="/quiz/:id/results/:attemptId" element={<QuizResultView />} />
+          </Route>
+          {/* Routes WITHOUT sidebar layout */}
           <Route path="/quiz/:id/play" element={<QuizView />} />
-          <Route path="/quiz/:id/results/:attemptId" element={<QuizResultView />} />
         </Route>
       </Routes>
     </AuthHandler>

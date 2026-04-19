@@ -70,6 +70,7 @@ export type OrderItemInfo = {
 
 export type TextConfigInfo = {
     review: TextReviewType;
+    correctAnswer: string;
 };
 
 export type FlashcardInfo = {

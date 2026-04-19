@@ -58,7 +58,7 @@ export default function QuizDetailView() {
                 </div>
                 <Link
                     to={`/quiz/${selectedQuiz.id}/play`}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-primary/10 hover:text-primary hover:cursor-pointer"
                 >
                     <Play size={20} fill="currentColor" />
                 </Link>
