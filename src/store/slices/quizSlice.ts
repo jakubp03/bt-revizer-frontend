@@ -1,6 +1,6 @@
 import type { Quiz, QuizDetailed } from '@/types/quiz';
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllQuizes, fetchQuizById } from '../thunks/quizThunks';
+import { createQuiz, fetchAllQuizes, fetchQuizById } from '../thunks/quizThunks';
 
 type QuizSliceState = {
     quizCollection: Quiz[];
@@ -53,6 +53,9 @@ const quizSlice = createSlice({
             .addCase(fetchQuizById.rejected, (state, action) => {
                 state.isLoadingSelected = false;
                 console.log(action.error.message || "error fetching quiz");
+            })
+            .addCase(createQuiz.fulfilled, (state, action) => {
+                state.quizCollection.push(action.payload as unknown as Quiz);
             })
     }
 });

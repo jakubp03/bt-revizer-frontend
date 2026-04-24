@@ -26,9 +26,9 @@ export default function AppSidebar() {
     return (
         <aside className="flex h-screen w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground">
             {/* Logo & title */}
-            <div className="flex items-center gap-3 px-2 py-3">
-                <img src={logo} alt="Revizer logo" className="h-12 w-12 p-0" />
-                <span className="text-lg font-semibold tracking-tight text-sidebar-foreground">
+            <div className="flex h-14 shrink-0 items-center gap-3 px-3">
+                <img src={logo} alt="Revizer logo" className="h-10 w-10" />
+                <span className="text-xl font-semibold tracking-tight text-sidebar-foreground">
                     Revizer
                 </span>
             </div>

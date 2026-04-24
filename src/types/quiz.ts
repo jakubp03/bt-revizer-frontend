@@ -22,7 +22,6 @@ export type QuizDetailed = {
     description: string;
     icon: string;
     timeLimit: number | null;
-    shuffleQuestions: boolean;
     totalPoints: number;
     questionCount: number;
     categories: Category[];

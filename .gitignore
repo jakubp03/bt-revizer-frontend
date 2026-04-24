@@ -9,6 +9,7 @@ lerna-debug.log*
 .env
 !.env.example
 /docs
+todo.txt
 
 node_modules
 dist

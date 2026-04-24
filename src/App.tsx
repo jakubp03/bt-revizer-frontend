@@ -7,6 +7,7 @@ import LoginView from "./components/ui/views/auth/LoginView";
 import RegisterView from "./components/ui/views/auth/RegisterView";
 import HomeView from "./components/ui/views/HomeView";
 import LibraryView from "./components/ui/views/library/LibraryView";
+import QuizCreationView from "./components/ui/views/quiz/create/QuizCreationView";
 import QuizDetailView from "./components/ui/views/quiz/QuizDetailView";
 import QuizResultView from "./components/ui/views/quiz/QuizResultView";
 import QuizView from "./components/ui/views/quiz/QuizView";
@@ -28,6 +29,7 @@ export default function App() {
           <Route element={<Layout><Outlet /></Layout>}>
             <Route path="/" element={<HomeView />} />
             <Route path="/library" element={<LibraryView />} />
+            <Route path="/quiz/create" element={<QuizCreationView />} />
             <Route path="/quiz/:id" element={<QuizDetailView />} />
             <Route path="/quiz/:id/results/:attemptId" element={<QuizResultView />} />
           </Route>
