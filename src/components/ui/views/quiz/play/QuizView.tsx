@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchQuizById } from '@/store/thunks/quizThunks';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import LoadingSpinner from '../../shared/LoadingSpinner';
+import LoadingSpinner from '../../../shared/LoadingSpinner';
 import QuizPlayView from './QuizPlayView';
 import QuizStartView from './QuizStartView';
 

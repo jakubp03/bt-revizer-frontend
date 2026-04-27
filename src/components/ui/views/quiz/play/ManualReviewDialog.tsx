@@ -3,8 +3,8 @@ import { setIsManualReviewOpen, setManualReviewResult } from '@/store/slices/qui
 import type { QuestionInfo } from '@/types/quiz';
 import { Check, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Button } from '../../shadcn_ui/button';
-import { Card, CardContent } from '../../shadcn_ui/card';
+import { Button } from '../../../shadcn_ui/button';
+import { Card, CardContent } from '../../../shadcn_ui/card';
 
 type Props = {
     questions: QuestionInfo[];

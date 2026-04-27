@@ -9,10 +9,10 @@ import {
 import type { QuizDetailed } from '@/types/quiz';
 import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoadingSpinner from '../../shared/LoadingSpinner';
+import LoadingSpinner from '../../../shared/LoadingSpinner';
 import ManualReviewDialog from './ManualReviewDialog';
-import QuizLayout from './QuizLayout';
 import QuestionRenderer from './questions/QuestionRenderer';
+import QuizLayout from './QuizLayout';
 
 type Props = {
     quiz: QuizDetailed;

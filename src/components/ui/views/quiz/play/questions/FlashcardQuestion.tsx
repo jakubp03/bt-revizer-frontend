@@ -3,7 +3,7 @@ import { setFlashcardAnswer } from '@/store/slices/quizPlaySlice';
 import type { QuestionInfo } from '@/types/quiz';
 import { Check, RotateCcw, X } from 'lucide-react';
 import { useState } from 'react';
-import { Button } from '../../../shadcn_ui/button';
+import { Button } from '../../../../shadcn_ui/button';
 
 export default function FlashcardQuestion({ question }: { question: QuestionInfo }) {
     const dispatch = useAppDispatch();

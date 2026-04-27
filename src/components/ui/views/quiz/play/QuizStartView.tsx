@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/shadcn_ui/button';
+import { Card, CardContent } from '@/components/ui/shadcn_ui/card';
 import { useAppSelector } from '@/store/hooks';
 import {
     AlarmClock,
@@ -6,8 +8,6 @@ import {
     Play,
     Star
 } from 'lucide-react';
-import { Button } from '../../shadcn_ui/button';
-import { Card, CardContent } from '../../shadcn_ui/card';
 
 export default function QuizStartView({ onStart }: { onStart: () => void }) {
     const { selectedQuiz } = useAppSelector((state) => state.quiz);

@@ -15,8 +15,8 @@ import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "../../shadcn_ui/card";
 import { Separator } from "../../shadcn_ui/separator";
+import CategoryBadge from "../../shared/CategoryBadge";
 import LoadingSpinner from "../../shared/LoadingSpinner";
-import CategoryBadge from "../library/CategoryBadge";
 
 export default function QuizDetailView() {
     const { id } = useParams<{ id: string }>();

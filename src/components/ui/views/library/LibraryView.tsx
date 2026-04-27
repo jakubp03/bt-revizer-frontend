@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/store/hooks";
 import LoadingSpinner from "../../shared/LoadingSpinner";
-import QuizCard from "./QuizCard";
+import QuizCard from "../../shared/QuizCard";
 
 export default function LibraryView() {
     const { quizCollection, isLoadingQuizes } = useAppSelector(

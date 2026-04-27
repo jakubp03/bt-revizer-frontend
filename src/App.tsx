@@ -8,9 +8,9 @@ import RegisterView from "./components/ui/views/auth/RegisterView";
 import HomeView from "./components/ui/views/HomeView";
 import LibraryView from "./components/ui/views/library/LibraryView";
 import QuizCreationView from "./components/ui/views/quiz/create/QuizCreationView";
+import QuizResultView from "./components/ui/views/quiz/play/QuizResultView";
+import QuizView from "./components/ui/views/quiz/play/QuizView";
 import QuizDetailView from "./components/ui/views/quiz/QuizDetailView";
-import QuizResultView from "./components/ui/views/quiz/QuizResultView";
-import QuizView from "./components/ui/views/quiz/QuizView";
 
 export default function App() {
   return (

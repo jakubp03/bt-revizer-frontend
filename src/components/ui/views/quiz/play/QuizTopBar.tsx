@@ -3,7 +3,7 @@ import { selectAnsweredCount } from '@/store/slices/quizPlaySlice';
 import type { QuestionInfo } from '@/types/quiz';
 import { Clock, SendHorizonal } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { Button } from '../../shadcn_ui/button';
+import { Button } from '../../../shadcn_ui/button';
 
 function formatTime(seconds: number): string {
     const m = Math.floor(seconds / 60);
