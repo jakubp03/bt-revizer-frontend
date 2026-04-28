@@ -21,9 +21,9 @@ export const fetchAllCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk(
     'category/createCategory',
-    async ({ name, description, color }: { name: string, description: string, color: string }, { rejectWithValue }) => {
+    async ({ name, description, color, quizIds }: { name: string, description: string, color: string, quizIds?: number[] }, { rejectWithValue }) => {
         try {
-            const response = await api.post('/category', { name, description, color });
+            const response = await api.post('/category', { name, description, color, quizIds });
             return response.data;
 
         } catch (error: unknown) {

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/store/hooks";
 import { FolderOpen, History, Home, Library, Plus } from "lucide-react";
 import type { ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinnerSmall from "../shared/LoadingSpinnerSmall";
 
 type NavItem = {
@@ -21,6 +21,7 @@ const navItems: NavItem[] = [
 
 export default function AppSidebar() {
     const location = useLocation();
+    const navigate = useNavigate();
     const { categoryCollection, isLoadingCategories } = useAppSelector(state => state.category);
 
     return (
@@ -85,6 +86,7 @@ export default function AppSidebar() {
 
                 <button
                     type="button"
+                    onClick={() => navigate('/category/create')}
                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 >
                     <Plus size={20} />

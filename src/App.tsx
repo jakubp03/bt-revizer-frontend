@@ -5,6 +5,8 @@ import ProtectedRoute from "./components/handlers/ProtectedRoute";
 import Layout from "./components/ui/Layout";
 import LoginView from "./components/ui/views/auth/LoginView";
 import RegisterView from "./components/ui/views/auth/RegisterView";
+import CategoryCreationView from "./components/ui/views/category/CategoryCreationView";
+import CategoryDetailView from "./components/ui/views/category/CategoryDetailView";
 import HomeView from "./components/ui/views/HomeView";
 import LibraryView from "./components/ui/views/library/LibraryView";
 import QuizCreationView from "./components/ui/views/quiz/create/QuizCreationView";
@@ -30,6 +32,8 @@ export default function App() {
             <Route path="/" element={<HomeView />} />
             <Route path="/library" element={<LibraryView />} />
             <Route path="/quiz/create" element={<QuizCreationView />} />
+            <Route path="/category/create" element={<CategoryCreationView />} />
+            <Route path="/category/:id" element={<CategoryDetailView />} />
             <Route path="/quiz/:id" element={<QuizDetailView />} />
             <Route path="/quiz/:id/results/:attemptId" element={<QuizResultView />} />
           </Route>

@@ -297,9 +297,12 @@ export default function QuizCreationView() {
                 >
                     <ArrowLeft size={20} />
                 </button>
-                <div>
-                    <h1 className="text-2xl font-bold text-foreground">Create Quiz</h1>
-                    <p className="text-sm text-muted-foreground">Fill in the details and add questions</p>
+                <div className="flex items-center gap-2">
+                    <BookOpen size={22} className="text-primary" />
+                    <div>
+                        <h1 className="text-2xl font-bold text-foreground">Create Quiz</h1>
+                        <p className="text-sm text-muted-foreground">Fill in the details and add questions</p>
+                    </div>
                 </div>
             </div>
 
