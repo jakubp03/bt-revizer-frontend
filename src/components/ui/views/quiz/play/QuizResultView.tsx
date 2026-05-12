@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/shadcn_ui/card';
 import { ChartContainer, type ChartConfig } from '@/components/ui/shadcn_ui/chart';
 import { Separator } from '@/components/ui/shadcn_ui/separator';
 import type { QuizResultResponse } from '@/types/quiz';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Pie, PieChart } from 'recharts';
 
 const chartConfig = {
@@ -12,7 +12,9 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function QuizResultView() {
+    const { id } = useParams<{ id: string }>();
     const location = useLocation();
+    const navigate = useNavigate();
     const results = location.state?.results as QuizResultResponse | undefined;
 
     if (!results) {
@@ -30,7 +32,7 @@ export default function QuizResultView() {
     ];
 
     return (
-        <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="flex items-center justify-center h-full p-4">
             <Card className="w-full max-w-lg">
                 <CardContent className="flex flex-col items-center gap-6 pt-6">
                     {/* Score + Pie Chart */}
@@ -68,9 +70,9 @@ export default function QuizResultView() {
 
                     {/* Action buttons */}
                     <div className="flex w-full justify-around gap-2 pb-2">
-                        <Button variant="outline">exit to dashboard</Button>
+                        <Button variant="outline" onClick={() => navigate('/')}>exit to home</Button>
                         <Button variant="outline">view results</Button>
-                        <Button variant="outline">try again</Button>
+                        <Button variant="outline" onClick={() => navigate(`/quiz/${id}/play`)}>try again</Button>
                     </div>
                 </CardContent>
             </Card>

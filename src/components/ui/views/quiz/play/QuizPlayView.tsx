@@ -7,7 +7,7 @@ import {
     startQuizPlay,
 } from '@/store/slices/quizPlaySlice';
 import type { QuizDetailed } from '@/types/quiz';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../../shared/LoadingSpinner';
 import ManualReviewDialog from './ManualReviewDialog';
@@ -32,6 +32,9 @@ export default function QuizPlayView({ quiz }: Props) {
         isManualReviewOpen,
         startTime,
     } = useAppSelector((s) => s.quizPlay);
+    const questionTimeSpentRef = useRef<Record<string, number>>({});
+    const questionStartTimeRef = useRef<number>(Date.now());
+    const currentQuestionIdRef = useRef<string | null>(null);
 
     // Initialize play state on mount
     useEffect(() => {
@@ -43,22 +46,48 @@ export default function QuizPlayView({ quiz }: Props) {
 
     const currentQuestion = quiz.questions[currentQuestionIndex];
 
+    // Accumulate time spent whenever the user moves to a different question
+    useEffect(() => {
+        const now = Date.now();
+        const prevQuestionId = currentQuestionIdRef.current;
+
+        if (prevQuestionId !== null) {
+            const elapsed = Math.round((now - questionStartTimeRef.current) / 1000);
+            questionTimeSpentRef.current[prevQuestionId] = (questionTimeSpentRef.current[prevQuestionId] ?? 0) + elapsed;
+        }
+
+        currentQuestionIdRef.current = quiz.questions[currentQuestionIndex]?.id.toString() ?? null;
+        questionStartTimeRef.current = now;
+    }, [currentQuestionIndex, quiz.questions]);
+
     const hasManualReviewQuestions = quiz.questions.some(
         (q) => q.type === 'TEXT_INPUT' && q.textConfig?.review === 'MANUAL',
     );
 
+
+
     const buildSubmission = useCallback(() => {
         const timeSpent = startTime ? Math.round((Date.now() - startTime) / 1000) : 0;
+
+        const getQuestionTimeSpent = (questionId: string): number => {
+            let accumulated = questionTimeSpentRef.current[questionId] ?? 0;
+            if (currentQuestionIdRef.current === questionId) {
+                accumulated += Math.round((Date.now() - questionStartTimeRef.current) / 1000);
+            }
+            return accumulated;
+        };
 
         const idBased = Object.entries(idBasedAnswers).map(([questionId, selectedOptionIds]) => ({
             questionId: Number(questionId),
             selectedOptionIds: selectedOptionIds.map(Number),
+            timeSpent: getQuestionTimeSpent(questionId),
         }));
 
         // Include flashcard answers as id-based (empty array = not recalled, we use questionId convention)
         const flashcardBased = Object.entries(flashcardAnswers).map(([questionId, correct]) => ({
             questionId: Number(questionId),
             selectedOptionIds: correct ? [Number(questionId)] : [],
+            timeSpent: getQuestionTimeSpent(questionId),
         }));
 
         const textBased = Object.entries(textBasedAnswers).map(([questionId, submittedAnswer]) => {
@@ -68,12 +97,14 @@ export default function QuizPlayView({ quiz }: Props) {
                 questionId: Number(questionId),
                 submittedAnswer,
                 userMarkedCorrect: isManual ? (manualReviewResults[questionId] ?? null) : null,
+                timeSpent: getQuestionTimeSpent(questionId),
             };
         });
 
         const matchBased = Object.entries(matchBasedAnswers).map(([questionId, pairs]) => ({
             questionId: Number(questionId),
             matchedPairs: pairs.map((p) => ({ leftId: Number(p.leftId), rightId: Number(p.rightId) })),
+            timeSpent: getQuestionTimeSpent(questionId),
         }));
 
         return {

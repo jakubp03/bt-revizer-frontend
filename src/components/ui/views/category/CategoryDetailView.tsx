@@ -62,9 +62,9 @@ export default function CategoryDetailView() {
                         <History size={14} />
                         Previous Attempts
                     </TabsTrigger>
-                    <TabsTrigger value="statistics" className="flex items-center gap-1.5">
+                    <TabsTrigger value="graphs" className="flex items-center gap-1.5">
                         <ChartNoAxesColumn size={14} />
-                        Statistics
+                        Graphs
                     </TabsTrigger>
                 </TabsList>
 

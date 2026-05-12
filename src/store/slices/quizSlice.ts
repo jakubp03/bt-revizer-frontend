@@ -1,12 +1,14 @@
-import type { Quiz, QuizDetailed } from '@/types/quiz';
+import type { Quiz, QuizDetailed, QuizStats } from '@/types/quiz';
 import { createSlice } from '@reduxjs/toolkit';
-import { createQuiz, fetchAllQuizes, fetchQuizById } from '../thunks/quizThunks';
+import { createQuiz, fetchAllQuizes, fetchQuizById, fetchQuizStats } from '../thunks/quizThunks';
 
 type QuizSliceState = {
     quizCollection: Quiz[];
     isLoadingQuizes: boolean;
     selectedQuiz: QuizDetailed | null;
     isLoadingSelected: boolean;
+    selectedQuizStats: QuizStats | null;
+    isLoadingStats: boolean;
 }
 
 const initialState: QuizSliceState = {
@@ -14,6 +16,8 @@ const initialState: QuizSliceState = {
     isLoadingQuizes: true,
     selectedQuiz: null,
     isLoadingSelected: false,
+    selectedQuizStats: null,
+    isLoadingStats: false,
 }
 
 const quizSlice = createSlice({
@@ -28,6 +32,9 @@ const quizSlice = createSlice({
         },
         clearSelectedQuiz: (state) => {
             state.selectedQuiz = null;
+        },
+        clearQuizStats: (state) => {
+            state.selectedQuizStats = null;
         },
     },
     extraReducers: (builder) => {
@@ -57,8 +64,18 @@ const quizSlice = createSlice({
             .addCase(createQuiz.fulfilled, (state, action) => {
                 state.quizCollection.push(action.payload as unknown as Quiz);
             })
+            .addCase(fetchQuizStats.pending, (state) => {
+                state.isLoadingStats = true;
+            })
+            .addCase(fetchQuizStats.fulfilled, (state, action) => {
+                state.selectedQuizStats = action.payload;
+                state.isLoadingStats = false;
+            })
+            .addCase(fetchQuizStats.rejected, (state) => {
+                state.isLoadingStats = false;
+            })
     }
 });
 
-export const { addQuiz, clearSelectedQuiz } = quizSlice.actions;
+export const { addQuiz, clearSelectedQuiz, clearQuizStats } = quizSlice.actions;
 export default quizSlice.reducer;

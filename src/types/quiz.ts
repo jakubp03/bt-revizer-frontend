@@ -28,8 +28,19 @@ export type QuizDetailed = {
     questions: QuestionInfo[];
     createdAt: string;
     updatedAt: string;
+};
+
+export type QuestionAttemptInfo = {
+    questionId: string;
+    averageQuestionAttemptTime: number | null;
+    averageQuestionScorePercentage: number;
+};
+
+export type QuizStats = {
+    attemptTimes: number[];
+    scorePercentages: number[];
     previousAttemptScorePercentage: number | null;
-    averageScorePercentage: number | null;
+    questionAttempts: QuestionAttemptInfo[];
 };
 
 export type QuestionInfo = {

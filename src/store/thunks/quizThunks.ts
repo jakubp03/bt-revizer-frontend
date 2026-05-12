@@ -1,5 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import type { Quiz } from '@/types/quiz';
 import api from '../../services/Api';
+
 
 interface CreateQuizPayload {
     title: string;
@@ -22,7 +25,7 @@ export const fetchAllQuizes = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response = await api.get('/quiz/allQuizes');
-            return response.data;
+            return response.data.map((quiz: Quiz) => ({ ...quiz, id: String(quiz.id) }));
         } catch (error: unknown) {
             console.error('Error in fetchAllQuizes', error);
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -55,9 +58,27 @@ export const fetchQuizById = createAsyncThunk(
     async (id: string, { rejectWithValue }) => {
         try {
             const response = await api.get(`/quiz/${id}`);
-            return response.data;
+            const data = response.data;
+            return { ...data, id: String(data.id) };
         } catch (error: unknown) {
             console.error('Error in fetchQuizById', error);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const responseData = (error && typeof error === 'object' && 'response' in error)
+                ? (error as { response?: { data?: unknown } }).response?.data
+                : undefined;
+            return rejectWithValue(responseData || errorMessage);
+        }
+    }
+);
+
+export const fetchQuizStats = createAsyncThunk(
+    'quiz/fetchQuizStats',
+    async (quizId: string, { rejectWithValue }) => {
+        try {
+            const response = await api.get(`/attempt/statistics/byQuizId/${quizId}`);
+            return response.data;
+        } catch (error: unknown) {
+            console.error('Error in fetchQuizStats', error);
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
             const responseData = (error && typeof error === 'object' && 'response' in error)
                 ? (error as { response?: { data?: unknown } }).response?.data
