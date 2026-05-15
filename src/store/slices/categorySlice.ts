@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createCategory, fetchAllCategories } from '../thunks/categoryThunks';
 export { createCategory, fetchAllCategories } from '../thunks/categoryThunks';
 
-
 type CategorySliceState = {
     categoryCollection: Category[];
     isLoadingCategories: boolean;

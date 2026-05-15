@@ -33,7 +33,7 @@ export default function QuizPlayView({ quiz }: Props) {
         startTime,
     } = useAppSelector((s) => s.quizPlay);
     const questionTimeSpentRef = useRef<Record<string, number>>({});
-    const questionStartTimeRef = useRef<number>(Date.now());
+    const questionStartTimeRef = useRef<number>(0);
     const currentQuestionIdRef = useRef<string | null>(null);
 
     // Initialize play state on mount

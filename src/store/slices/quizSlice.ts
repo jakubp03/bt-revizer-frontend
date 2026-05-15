@@ -36,6 +36,13 @@ const quizSlice = createSlice({
         clearQuizStats: (state) => {
             state.selectedQuizStats = null;
         },
+        addCategoryToQuiz: (state, action) => {
+            const { category, quizId } = action.payload;
+            const foundQuiz = state.quizCollection.find((quiz: Quiz) => (quiz.id === quizId));
+            if (foundQuiz) {
+                foundQuiz.categories.push(category);
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -77,5 +84,5 @@ const quizSlice = createSlice({
     }
 });
 
-export const { addQuiz, clearSelectedQuiz, clearQuizStats } = quizSlice.actions;
+export const { addQuiz, clearSelectedQuiz, clearQuizStats, addCategoryToQuiz } = quizSlice.actions;
 export default quizSlice.reducer;

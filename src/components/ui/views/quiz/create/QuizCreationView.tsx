@@ -42,6 +42,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { QuestionCreationType, QuestionForm } from '../../../../../types/quizCreationTypes';
 import { createQuestion } from '../../../../../types/quizCreationTypes';
+import CategoryForm from '../../category/CategoryForm';
 import QuestionCard from './QuestionCard';
 import TimePicker from './TimePicker';
 
@@ -188,6 +189,7 @@ export default function QuizCreationView() {
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
 
     // Refs for click-outside
     const categoryDropdownRef = useRef<HTMLDivElement>(null);
@@ -478,9 +480,10 @@ export default function QuizCreationView() {
                                 )}
                             </div>
 
-                            {/* New category button (no-op) */}
+                            {/* New category button */}
                             <button
                                 type="button"
+                                onClick={() => setNewCategoryModalOpen(true)}
                                 className="flex h-7 items-center gap-1 rounded-full border border-border px-2.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary hover:cursor-pointer"
                             >
                                 <BookOpen size={12} />
@@ -579,6 +582,21 @@ export default function QuizCreationView() {
                     {isSubmitting ? 'Creating…' : 'Create Quiz'}
                 </Button>
             </div>
+
+            {/* New category modal */}
+            {newCategoryModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="w-full max-w-lg max-h-[75vh] overflow-y-auto styled-scrollbar">
+                        <CategoryForm
+                            onSuccess={(category) => {
+                                setNewCategoryModalOpen(false);
+                                setSelectedCategoryIds((prev) => [...prev, category.id]);
+                            }}
+                            onCancel={() => setNewCategoryModalOpen(false)}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

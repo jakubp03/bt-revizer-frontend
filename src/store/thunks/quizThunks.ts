@@ -42,7 +42,7 @@ export const createQuiz = createAsyncThunk<QuizBasicResponse, CreateQuizPayload>
     async (data, { rejectWithValue }) => {
         try {
             const response = await api.post('/quiz', data);
-            return response.data;
+            return { ...response.data, id: String(response.data.id) };
         } catch (error: unknown) {
             console.error('Error in createQuiz', error);
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
