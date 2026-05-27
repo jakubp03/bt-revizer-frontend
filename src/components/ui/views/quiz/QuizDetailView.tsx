@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { clearQuizStats, clearSelectedQuiz } from "@/store/slices/quizSlice";
 import { fetchQuizById, fetchQuizStats } from "@/store/thunks/quizThunks";
+import ReactECharts from "echarts-for-react";
 import {
     AlarmClock,
     AlarmClockOff,
@@ -15,17 +16,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Line,
-    LineChart,
-    XAxis,
-    YAxis,
-} from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "../../shadcn_ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../../shadcn_ui/chart";
 import { Separator } from "../../shadcn_ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../shadcn_ui/tabs";
 import CategoryBadge from "../../shared/CategoryBadge";
@@ -94,6 +85,10 @@ export default function QuizDetailView() {
                 time: q.averageQuestionAttemptTime as number,
             }));
     }, [selectedQuizStats]);
+
+    const primaryColor = useMemo(() => {
+        return getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#6366f1';
+    }, []);
 
     if (isLoadingSelected || !selectedQuiz) {
         return <LoadingSpinner />;
@@ -256,15 +251,37 @@ export default function QuizDetailView() {
                                     {!hasAttempts || scoreOverAttemptsData.length === 0 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
-                                        <ChartContainer config={{ score: { label: "Score %", color: "var(--color-primary)" } }} className="h-96">
-                                            <LineChart data={scoreOverAttemptsData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="attempt" label={{ value: "Attempt", position: "insideBottom", offset: -2 }} />
-                                                <YAxis domain={[0, 100]} unit="%" />
-                                                <ChartTooltip content={<ChartTooltipContent />} />
-                                                <Line type="monotone" dataKey="score" name="Score %" stroke="var(--color-primary)" strokeWidth={2} dot />
-                                            </LineChart>
-                                        </ChartContainer>
+                                        <ReactECharts
+                                            style={{ height: '384px' }}
+                                            option={{
+                                                grid: { top: 16, right: 16, bottom: 40, left: 55 },
+                                                xAxis: {
+                                                    type: 'category',
+                                                    data: scoreOverAttemptsData.map(d => d.attempt),
+                                                    name: 'Attempt',
+                                                    nameLocation: 'middle',
+                                                    nameGap: 25,
+                                                },
+                                                yAxis: {
+                                                    type: 'value',
+                                                    min: 0,
+                                                    max: 100,
+                                                    axisLabel: { formatter: '{value}%' },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'axis',
+                                                    formatter: (params: any[]) =>
+                                                        `Attempt ${params[0].name}<br/>Score: ${params[0].value}%`,
+                                                },
+                                                series: [{
+                                                    type: 'bar',
+                                                    data: scoreOverAttemptsData.map(d => d.score),
+                                                    name: 'Score %',
+                                                    itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] },
+                                                    emphasis: { itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] } },
+                                                }],
+                                            }}
+                                        />
                                     )}
                                 </CardContent>
                             </Card>
@@ -282,15 +299,35 @@ export default function QuizDetailView() {
                                     {!hasAttempts || timeOverAttemptsData.length === 0 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
-                                        <ChartContainer config={{ time: { label: "Time (s)", color: "var(--color-primary)" } }} className="h-96">
-                                            <LineChart data={timeOverAttemptsData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="attempt" label={{ value: "Attempt", position: "insideBottom", offset: -2 }} />
-                                                <YAxis unit="s" />
-                                                <ChartTooltip content={<ChartTooltipContent />} />
-                                                <Line type="monotone" dataKey="time" name="Time (s)" stroke="var(--color-primary)" strokeWidth={2} dot />
-                                            </LineChart>
-                                        </ChartContainer>
+                                        <ReactECharts
+                                            style={{ height: '384px' }}
+                                            option={{
+                                                grid: { top: 16, right: 16, bottom: 40, left: 55 },
+                                                xAxis: {
+                                                    type: 'category',
+                                                    data: timeOverAttemptsData.map(d => d.attempt),
+                                                    name: 'Attempt',
+                                                    nameLocation: 'middle',
+                                                    nameGap: 25,
+                                                },
+                                                yAxis: {
+                                                    type: 'value',
+                                                    axisLabel: { formatter: '{value}s' },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'axis',
+                                                    formatter: (params: any[]) =>
+                                                        `Attempt ${params[0].name}<br/>Time: ${params[0].value}s`,
+                                                },
+                                                series: [{
+                                                    type: 'bar',
+                                                    data: timeOverAttemptsData.map(d => d.time),
+                                                    name: 'Time (s)',
+                                                    itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] },
+                                                    emphasis: { itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] } },
+                                                }],
+                                            }}
+                                        />
                                     )}
                                 </CardContent>
                             </Card>
@@ -308,15 +345,34 @@ export default function QuizDetailView() {
                                     {!hasAttempts || errorRateData.length === 0 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
-                                        <ChartContainer config={{ rate: { label: "Score %", color: "var(--color-primary)" } }} className="h-96">
-                                            <BarChart data={errorRateData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="question" />
-                                                <YAxis domain={[0, 100]} unit="%" />
-                                                <ChartTooltip content={<ChartTooltipContent />} />
-                                                <Bar dataKey="rate" name="Score %" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
-                                            </BarChart>
-                                        </ChartContainer>
+                                        <ReactECharts
+                                            style={{ height: '384px' }}
+                                            option={{
+                                                grid: { top: 16, right: 16, bottom: 30, left: 55 },
+                                                xAxis: {
+                                                    type: 'category',
+                                                    data: errorRateData.map(d => d.question),
+                                                },
+                                                yAxis: {
+                                                    type: 'value',
+                                                    min: 0,
+                                                    max: 100,
+                                                    axisLabel: { formatter: '{value}%' },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'axis',
+                                                    formatter: (params: any[]) =>
+                                                        `${params[0].name}<br/>Avg Score: ${params[0].value}%`,
+                                                },
+                                                series: [{
+                                                    type: 'bar',
+                                                    data: errorRateData.map(d => d.rate),
+                                                    name: 'Score %',
+                                                    itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] },
+                                                    emphasis: { itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] } },
+                                                }],
+                                            }}
+                                        />
                                     )}
                                 </CardContent>
                             </Card>
@@ -334,15 +390,32 @@ export default function QuizDetailView() {
                                     {!hasAttempts || timePerQuestionData.length === 0 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
-                                        <ChartContainer config={{ time: { label: "Time (s)", color: "var(--color-primary)" } }} className="h-96">
-                                            <BarChart data={timePerQuestionData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="question" />
-                                                <YAxis unit="s" />
-                                                <ChartTooltip content={<ChartTooltipContent />} />
-                                                <Bar dataKey="time" name="Time (s)" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
-                                            </BarChart>
-                                        </ChartContainer>
+                                        <ReactECharts
+                                            style={{ height: '384px' }}
+                                            option={{
+                                                grid: { top: 16, right: 16, bottom: 30, left: 55 },
+                                                xAxis: {
+                                                    type: 'category',
+                                                    data: timePerQuestionData.map(d => d.question),
+                                                },
+                                                yAxis: {
+                                                    type: 'value',
+                                                    axisLabel: { formatter: '{value}s' },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'axis',
+                                                    formatter: (params: any[]) =>
+                                                        `${params[0].name}<br/>Avg Time: ${params[0].value}s`,
+                                                },
+                                                series: [{
+                                                    type: 'bar',
+                                                    data: timePerQuestionData.map(d => d.time),
+                                                    name: 'Time (s)',
+                                                    itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] },
+                                                    emphasis: { itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] } },
+                                                }],
+                                            }}
+                                        />
                                     )}
                                 </CardContent>
                             </Card>
