@@ -256,7 +256,7 @@ export default function QuizDetailView() {
                                     {!hasAttempts || scoreOverAttemptsData.length === 0 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
-                                        <ChartContainer config={{ score: { label: "Score %", color: "var(--color-primary)" } }}>
+                                        <ChartContainer config={{ score: { label: "Score %", color: "var(--color-primary)" } }} className="h-96">
                                             <LineChart data={scoreOverAttemptsData}>
                                                 <CartesianGrid strokeDasharray="3 3" />
                                                 <XAxis dataKey="attempt" label={{ value: "Attempt", position: "insideBottom", offset: -2 }} />
@@ -282,7 +282,7 @@ export default function QuizDetailView() {
                                     {!hasAttempts || timeOverAttemptsData.length === 0 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
-                                        <ChartContainer config={{ time: { label: "Time (s)", color: "var(--color-primary)" } }}>
+                                        <ChartContainer config={{ time: { label: "Time (s)", color: "var(--color-primary)" } }} className="h-96">
                                             <LineChart data={timeOverAttemptsData}>
                                                 <CartesianGrid strokeDasharray="3 3" />
                                                 <XAxis dataKey="attempt" label={{ value: "Attempt", position: "insideBottom", offset: -2 }} />
@@ -308,7 +308,7 @@ export default function QuizDetailView() {
                                     {!hasAttempts || errorRateData.length === 0 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
-                                        <ChartContainer config={{ rate: { label: "Score %", color: "var(--color-primary)" } }}>
+                                        <ChartContainer config={{ rate: { label: "Score %", color: "var(--color-primary)" } }} className="h-96">
                                             <BarChart data={errorRateData}>
                                                 <CartesianGrid strokeDasharray="3 3" />
                                                 <XAxis dataKey="question" />
@@ -334,7 +334,7 @@ export default function QuizDetailView() {
                                     {!hasAttempts || timePerQuestionData.length === 0 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
-                                        <ChartContainer config={{ time: { label: "Time (s)", color: "var(--color-primary)" } }}>
+                                        <ChartContainer config={{ time: { label: "Time (s)", color: "var(--color-primary)" } }} className="h-96">
                                             <BarChart data={timePerQuestionData}>
                                                 <CartesianGrid strokeDasharray="3 3" />
                                                 <XAxis dataKey="question" />

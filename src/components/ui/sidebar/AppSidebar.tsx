@@ -2,8 +2,8 @@ import logo from "@/assets/logo.svg";
 import { Separator } from "@/components/ui/shadcn_ui/separator";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/store/hooks";
-import { FolderOpen, History, Home, Library, Plus } from "lucide-react";
-import type { ReactNode } from "react";
+import { ChevronDown, ChevronUp, FolderOpen, History, Home, Library, Plus } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinnerSmall from "../shared/LoadingSpinnerSmall";
 
@@ -23,6 +23,8 @@ export default function AppSidebar() {
     const location = useLocation();
     const navigate = useNavigate();
     const { categoryCollection, isLoadingCategories } = useAppSelector(state => state.category);
+    const [isCategoryListCollapsed, setIsCategoryListCollapsed] = useState(true);
+    let visibleCategories = isCategoryListCollapsed ? categoryCollection.slice(0, 5) : categoryCollection;
 
     return (
         <aside className="flex h-screen w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground">
@@ -68,7 +70,7 @@ export default function AppSidebar() {
 
                 {isLoadingCategories ? (
                     <LoadingSpinnerSmall />
-                ) : categoryCollection.map((category) => (
+                ) : visibleCategories.map((category) => (
                     <Link
                         key={category.id}
                         to={`/category/${category.id}`}
@@ -83,6 +85,15 @@ export default function AppSidebar() {
                         {category.name}
                     </Link>
                 ))}
+
+                <button
+                    type="button"
+                    onClick={() => setIsCategoryListCollapsed(!isCategoryListCollapsed)}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                >
+                    {isCategoryListCollapsed ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                    {isCategoryListCollapsed ? "Expand" : "Collapse"}
+                </button>
 
                 <button
                     type="button"
