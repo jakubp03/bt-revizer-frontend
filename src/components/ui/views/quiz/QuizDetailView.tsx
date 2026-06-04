@@ -72,17 +72,28 @@ export default function QuizDetailView() {
         if (!selectedQuizStats) return [];
         return selectedQuizStats.questionAttempts.map((q, i) => ({
             question: `Q${i + 1}`,
-            rate: Math.round(q.averageQuestionScorePercentage * 10) / 10,
+            med: q.medQuestionScorePercentage
         }));
     }, [selectedQuizStats]);
 
     const timePerQuestionData = useMemo(() => {
         if (!selectedQuizStats) return [];
         return selectedQuizStats.questionAttempts
-            .filter((q) => q.averageQuestionAttemptTime != null)
+            .filter((q) => q != null
+                && q.minQuestionAttemptTime !== null
+                && q.q1QuestionAttemptTime !== null
+                && q.medQuestionAttemptTime !== null
+                && q.q3QuestionAttemptTime !== null
+                && q.maxQuestionAttemptTime !== null
+            )
             .map((q, i) => ({
                 question: `Q${i + 1}`,
-                time: q.averageQuestionAttemptTime as number,
+                min: q.minQuestionAttemptTime!,
+                q1: q.q1QuestionAttemptTime!,
+                med: q.medQuestionAttemptTime!,
+                q3: q.q3QuestionAttemptTime!,
+                max: q.maxQuestionAttemptTime!,
+                outliers: q.outliers!
             }));
     }, [selectedQuizStats]);
 
@@ -98,6 +109,8 @@ export default function QuizDetailView() {
     const formattedUpdatedAt = new Date(selectedQuiz.updatedAt).toLocaleDateString();
 
     const hasAttempts = attemptCount !== null && attemptCount > 0;
+
+    console.log(timePerQuestionData.length);
 
     return (
         <div className="flex flex-col gap-6 p-6">
@@ -338,7 +351,7 @@ export default function QuizDetailView() {
                             <Card>
                                 <CardHeader>
                                     <CardTitle className="text-sm font-medium text-muted-foreground">
-                                        Average Score % per Question
+                                        Median Score % per Question
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
@@ -362,11 +375,11 @@ export default function QuizDetailView() {
                                                 tooltip: {
                                                     trigger: 'axis',
                                                     formatter: (params: any[]) =>
-                                                        `${params[0].name}<br/>Avg Score: ${params[0].value}%`,
+                                                        `${params[0].name}<br/>Median Score: ${params[0].value}%`,
                                                 },
                                                 series: [{
                                                     type: 'bar',
-                                                    data: errorRateData.map(d => d.rate),
+                                                    data: errorRateData.map(d => d.med),
                                                     name: 'Score %',
                                                     itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] },
                                                     emphasis: { itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] } },
@@ -383,11 +396,11 @@ export default function QuizDetailView() {
                             <Card>
                                 <CardHeader>
                                     <CardTitle className="text-sm font-medium text-muted-foreground">
-                                        Average Time per Question
+                                        Time per Question (Box Plot)
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    {!hasAttempts || timePerQuestionData.length === 0 ? (
+                                    {!hasAttempts || attemptCount < 5 ? (
                                         <p className="text-sm text-muted-foreground">Insufficient data</p>
                                     ) : (
                                         <ReactECharts
@@ -397,23 +410,36 @@ export default function QuizDetailView() {
                                                 xAxis: {
                                                     type: 'category',
                                                     data: timePerQuestionData.map(d => d.question),
+                                                    boundaryGap: true,
                                                 },
                                                 yAxis: {
                                                     type: 'value',
                                                     axisLabel: { formatter: '{value}s' },
                                                 },
                                                 tooltip: {
-                                                    trigger: 'axis',
-                                                    formatter: (params: any[]) =>
-                                                        `${params[0].name}<br/>Avg Time: ${params[0].value}s`,
+                                                    trigger: 'item',
+                                                    formatter: (params: any) => {
+                                                        if (params.seriesType === 'boxplot') {
+                                                            // data[0] is the category index; actual values start at index 1
+                                                            return `${params.name}<br/>Max: ${params.data[5]}s<br/>Q3: ${params.data[4]}s<br/>Median: ${params.data[3]}s<br/>Q1: ${params.data[2]}s<br/>Min: ${params.data[1]}s`;
+                                                        }
+                                                        return `${params.name}<br/>Outlier: ${params.data[1]}s`;
+                                                    },
                                                 },
-                                                series: [{
-                                                    type: 'bar',
-                                                    data: timePerQuestionData.map(d => d.time),
-                                                    name: 'Time (s)',
-                                                    itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] },
-                                                    emphasis: { itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] } },
-                                                }],
+                                                series: [
+                                                    {
+                                                        type: 'boxplot',
+                                                        data: timePerQuestionData.map(d => [d.min, d.q1, d.med, d.q3, d.max]),
+                                                        itemStyle: { color: 'transparent', borderColor: primaryColor, borderWidth: 2 },
+                                                    },
+                                                    {
+                                                        type: 'scatter',
+                                                        data: timePerQuestionData.flatMap((d, i) =>
+                                                            d.outliers.map((o: number) => [i, o])
+                                                        ),
+                                                        itemStyle: { color: primaryColor },
+                                                    },
+                                                ],
                                             }}
                                         />
                                     )}

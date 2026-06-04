@@ -32,8 +32,13 @@ export type QuizDetailed = {
 
 export type QuestionAttemptInfo = {
     questionId: string;
-    averageQuestionAttemptTime: number | null;
-    averageQuestionScorePercentage: number;
+    minQuestionAttemptTime: number | null;
+    q1QuestionAttemptTime: number | null;
+    medQuestionAttemptTime: number | null;
+    q3QuestionAttemptTime: number | null;
+    maxQuestionAttemptTime: number | null;
+    outliers: number[] | null;
+    medQuestionScorePercentage: number;
 };
 
 export type QuizStats = {
