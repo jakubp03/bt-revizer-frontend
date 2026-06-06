@@ -92,5 +92,77 @@ export type FlashcardInfo = {
     backText: string;
 };
 
+export type AttemptBasicResponse = {
+    id: string;
+    submittedAt: string;
+    scorePercentage: number;
+    timeSpent: number;
+};
+
+export type ChoiceOptionReview = {
+    id: string;
+    text: string;
+    optionOrder: number;
+    correct: boolean;
+    selected: boolean;
+};
+
+export type MatchPairReview = {
+    id: string;
+    leftSide: string;
+    correctRightSide: string;
+    userRightId: string;
+    userRightSide: string;
+    correct: boolean;
+};
+
+export type OrderItemReview = {
+    id: string;
+    text: string;
+    correctPosition: number;
+    userPosition: number;
+    correct: boolean;
+};
+
+export type TextAnswerReview = {
+    reviewType: string;
+    correctAnswer: string | null;
+    userAnswer: string;
+    scorePercentage: number;
+};
+
+export type FlashcardAnswerReview = {
+    backText: string;
+    markedCorrect: boolean;
+};
+
+export type QuestionReview = {
+    questionId: string;
+    questionOrder: number;
+    type: QuestionType;
+    questionText: string;
+    imagePath: string | null;
+    points: number;
+    pointsAwarded: number;
+    scorePercentage: number;
+    choiceOptions: ChoiceOptionReview[] | null;
+    matchPairs: MatchPairReview[] | null;
+    orderItems: OrderItemReview[] | null;
+    textAnswer: TextAnswerReview | null;
+    flashcard: FlashcardAnswerReview | null;
+};
+
+export type AttemptReviewResponse = {
+    attemptId: string;
+    quizId: string;
+    quizTitle: string;
+    scorePercentage: number;
+    score: number;
+    maxScore: number;
+    timeSpent: number | null;
+    submittedAt: string;
+    questions: QuestionReview[];
+};
+
 
 

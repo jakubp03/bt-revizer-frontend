@@ -12,6 +12,7 @@ import LibraryView from "./components/ui/views/library/LibraryView";
 import QuizCreationView from "./components/ui/views/quiz/create/QuizCreationView";
 import QuizResultView from "./components/ui/views/quiz/play/QuizResultView";
 import QuizView from "./components/ui/views/quiz/play/QuizView";
+import QuizAttemptReviewView from "./components/ui/views/quiz/QuizAttemptReviewView";
 import QuizDetailView from "./components/ui/views/quiz/QuizDetailView";
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/quiz/:id" element={<QuizDetailView />} />
             <Route path="/quiz/:id/results/:attemptId" element={<QuizResultView />} />
           </Route>
+          <Route path="/quiz/:id/review/:attemptId" element={<QuizAttemptReviewView />} />
           {/* Routes WITHOUT sidebar layout */}
           <Route path="/quiz/:id/play" element={<QuizView />} />
         </Route>

@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { enableMapSet } from 'immer';
+import attemptReviewSlice from './slices/attemptReviewSlice';
 import authSlice from './slices/authSlice';
 import categorySlice from './slices/categorySlice';
 import quizPlaySlice from './slices/quizPlaySlice';
@@ -15,6 +16,7 @@ export const store = configureStore({
     category: categorySlice,
     quiz: quizSlice,
     quizPlay: quizPlaySlice,
+    attemptReview: attemptReviewSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

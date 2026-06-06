@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { clearQuizStats, clearSelectedQuiz } from "@/store/slices/quizSlice";
-import { fetchQuizById, fetchQuizStats } from "@/store/thunks/quizThunks";
+import { clearQuizAttempts, clearQuizStats, clearSelectedQuiz } from "@/store/slices/quizSlice";
+import { fetchQuizAttempts, fetchQuizById, fetchQuizStats } from "@/store/thunks/quizThunks";
 import ReactECharts from "echarts-for-react";
 import {
     AlarmClock,
@@ -25,7 +25,7 @@ import LoadingSpinner from "../../shared/LoadingSpinner";
 export default function QuizDetailView() {
     const { id } = useParams<{ id: string }>();
     const dispatch = useAppDispatch();
-    const { selectedQuiz, isLoadingSelected, selectedQuizStats } = useAppSelector((state) => state.quiz);
+    const { selectedQuiz, isLoadingSelected, selectedQuizStats, selectedQuizAttempts } = useAppSelector((state) => state.quiz);
 
     useEffect(() => {
         if (!id) {
@@ -38,9 +38,11 @@ export default function QuizDetailView() {
         }
 
         dispatch(fetchQuizStats(id));
+        dispatch(fetchQuizAttempts(id));
 
         return () => {
             dispatch(clearQuizStats());
+            dispatch(clearQuizAttempts());
         };
     }, [id, dispatch]);
 
@@ -237,7 +239,39 @@ export default function QuizDetailView() {
                 <TabsContent value="attempts">
                     <Card>
                         <CardContent className="py-6">
-                            <p className="text-sm text-muted-foreground">No attempts yet</p>
+                            {!selectedQuizAttempts || selectedQuizAttempts.length === 0 ? (
+                                <p className="text-sm text-muted-foreground">No attempts yet</p>
+                            ) : (
+                                <div className="flex flex-col gap-1">
+                                    <div className="flex items-center justify-between px-4 pb-2 text-xs font-medium text-muted-foreground border-b">
+                                        <span>Attempt</span>
+                                        <div className="flex items-center gap-8">
+                                            <span>Date</span>
+                                            <span>Score</span>
+                                        </div>
+                                    </div>
+                                    <ul className="flex flex-col">
+                                        {selectedQuizAttempts.map((attempt, index) => (
+                                            <li key={attempt.id}>
+                                                <Link
+                                                    to={`/quiz/${selectedQuiz.id}/review/${attempt.id}`}
+                                                    className="flex items-center justify-between rounded-md px-4 py-3 text-sm transition-colors hover:bg-muted"
+                                                >
+                                                    <span className="font-medium">Attempt #{selectedQuizAttempts.length - index}</span>
+                                                    <div className="flex items-center gap-8">
+                                                        <span className="text-muted-foreground">
+                                                            {new Date(attempt.submittedAt).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                                        </span>
+                                                        <span className="font-medium w-10 text-right">
+                                                            {Math.round(attempt.scorePercentage)}%
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 </TabsContent>

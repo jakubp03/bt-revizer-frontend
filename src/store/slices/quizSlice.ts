@@ -1,6 +1,6 @@
-import type { Quiz, QuizDetailed, QuizStats } from '@/types/quiz';
+import type { AttemptBasicResponse, Quiz, QuizDetailed, QuizStats } from '@/types/quiz';
 import { createSlice } from '@reduxjs/toolkit';
-import { createQuiz, fetchAllQuizes, fetchQuizById, fetchQuizStats } from '../thunks/quizThunks';
+import { createQuiz, fetchAllQuizes, fetchQuizAttempts, fetchQuizById, fetchQuizStats } from '../thunks/quizThunks';
 
 type QuizSliceState = {
     quizCollection: Quiz[];
@@ -9,6 +9,8 @@ type QuizSliceState = {
     isLoadingSelected: boolean;
     selectedQuizStats: QuizStats | null;
     isLoadingStats: boolean;
+    selectedQuizAttempts: AttemptBasicResponse[] | null;
+    isLoadingAttempts: boolean;
 }
 
 const initialState: QuizSliceState = {
@@ -18,6 +20,8 @@ const initialState: QuizSliceState = {
     isLoadingSelected: false,
     selectedQuizStats: null,
     isLoadingStats: false,
+    selectedQuizAttempts: null,
+    isLoadingAttempts: false,
 }
 
 const quizSlice = createSlice({
@@ -35,6 +39,9 @@ const quizSlice = createSlice({
         },
         clearQuizStats: (state) => {
             state.selectedQuizStats = null;
+        },
+        clearQuizAttempts: (state) => {
+            state.selectedQuizAttempts = null;
         },
         addCategoryToQuiz: (state, action) => {
             const { category, quizId } = action.payload;
@@ -81,8 +88,18 @@ const quizSlice = createSlice({
             .addCase(fetchQuizStats.rejected, (state) => {
                 state.isLoadingStats = false;
             })
+            .addCase(fetchQuizAttempts.pending, (state) => {
+                state.isLoadingAttempts = true;
+            })
+            .addCase(fetchQuizAttempts.fulfilled, (state, action) => {
+                state.selectedQuizAttempts = action.payload;
+                state.isLoadingAttempts = false;
+            })
+            .addCase(fetchQuizAttempts.rejected, (state) => {
+                state.isLoadingAttempts = false;
+            })
     }
 });
 
-export const { addQuiz, clearSelectedQuiz, clearQuizStats, addCategoryToQuiz } = quizSlice.actions;
+export const { addQuiz, clearSelectedQuiz, clearQuizStats, clearQuizAttempts, addCategoryToQuiz } = quizSlice.actions;
 export default quizSlice.reducer;
