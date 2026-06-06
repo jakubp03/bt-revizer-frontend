@@ -70,8 +70,8 @@ export default function QuizResultView() {
 
                     {/* Action buttons */}
                     <div className="flex w-full justify-around gap-2 pb-2">
-                        <Button variant="outline" onClick={() => navigate('/')}>exit to home</Button>
-                        <Button variant="outline">view results</Button>
+                        <Button variant="outline" onClick={() => navigate(-2)}>go back</Button>
+                        <Button variant="outline" onClick={() => navigate(`/quiz/${id}/review/${results.attemptId}`)}>review results</Button>
                         <Button variant="outline" onClick={() => navigate(`/quiz/${id}/play`)}>try again</Button>
                     </div>
                 </CardContent>
