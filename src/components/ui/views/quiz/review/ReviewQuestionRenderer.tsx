@@ -99,8 +99,8 @@ function ChoiceReviewQuestion({
 function TextReviewQuestion({ textAnswer }: { textAnswer: TextAnswerReview }) {
     const isCorrect = textAnswer.scorePercentage >= 100;
     const borderCls = isCorrect
-        ? 'border-green-500 text-green-700 dark:text-green-400'
-        : 'border-red-500 text-red-600 dark:text-red-400';
+        ? 'border-green-500 text-green-700 dark:text-green-400 dark:bg-green-950/30'
+        : 'border-red-500 text-red-600 dark:text-red-400 dark:bg-red-950/30';
     const reviewLabel = textAnswer.reviewType === 'MANUAL' ? 'manual review' : 'automatic review';
 
     return (
@@ -142,7 +142,7 @@ function MatchReviewQuestion({
             <StatusLabel status={status} />
             <div className="flex flex-col gap-3">
                 {pairs.map((pair) => {
-                    const rightBorderCls = pair.correct ? 'border-green-500' : 'border-red-500';
+                    const rightBorderCls = pair.correct ? 'border-green-500 dark:bg-green-950/30' : 'border-red-500 dark:bg-red-950/30';
                     const rightTextCls = pair.correct
                         ? 'text-green-600 dark:text-green-400'
                         : 'text-red-600 dark:text-red-400';
@@ -189,7 +189,7 @@ function OrderReviewQuestion({
             <StatusLabel status={status} />
             <div className="flex flex-col gap-3">
                 {sorted.map((item) => {
-                    const borderCls = item.correct ? 'border-green-500' : 'border-red-500';
+                    const borderCls = item.correct ? 'border-green-500 dark:bg-green-950/30' : 'border-red-500 dark:bg-red-950/30';
                     const textCls = item.correct
                         ? 'text-green-600 dark:text-green-400'
                         : 'text-red-600 dark:text-red-400';
