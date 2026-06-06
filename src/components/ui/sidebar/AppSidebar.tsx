@@ -86,14 +86,17 @@ export default function AppSidebar() {
                     </Link>
                 ))}
 
-                <button
-                    type="button"
-                    onClick={() => setIsCategoryListCollapsed(!isCategoryListCollapsed)}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                >
-                    {isCategoryListCollapsed ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
-                    {isCategoryListCollapsed ? "Expand" : "Collapse"}
-                </button>
+                {!isLoadingCategories && (
+                    <button
+                        type="button"
+                        onClick={() => setIsCategoryListCollapsed(!isCategoryListCollapsed)}
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    >
+                        {isCategoryListCollapsed ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                        {isCategoryListCollapsed ? "Expand" : "Collapse"}
+                    </button>
+                )}
+
 
                 <button
                     type="button"
