@@ -99,6 +99,25 @@ export type AttemptBasicResponse = {
     timeSpent: number;
 };
 
+export type AttemptSummaryResponse = {
+    id: string;
+    submittedAt: string;
+    scorePercentage: number;
+    timeSpent: number;
+    quizId: string;
+    quizTitle: string;
+};
+
+export type PageResponse<T> = {
+    content: T[];
+    totalElements: number;
+    totalPages: number;
+    number: number;
+    size: number;
+    first: boolean;
+    last: boolean;
+};
+
 export type ChoiceOptionReview = {
     id: string;
     text: string;

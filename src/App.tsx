@@ -3,6 +3,7 @@ import AuthHandler from "./components/handlers/AuthHandler";
 import InitializationHandler from "./components/handlers/InitializationHandler";
 import ProtectedRoute from "./components/handlers/ProtectedRoute";
 import Layout from "./components/ui/Layout";
+import AttemptHistoryView from "./components/ui/views/AttemptHistoryView";
 import LoginView from "./components/ui/views/auth/LoginView";
 import RegisterView from "./components/ui/views/auth/RegisterView";
 import CategoryCreationView from "./components/ui/views/category/CategoryCreationView";
@@ -31,6 +32,7 @@ export default function App() {
           {/* Routes WITH sidebar layout */}
           <Route element={<Layout><Outlet /></Layout>}>
             <Route path="/" element={<HomeView />} />
+            <Route path="/history" element={<AttemptHistoryView />} />
             <Route path="/library" element={<LibraryView />} />
             <Route path="/quiz/create" element={<QuizCreationView />} />
             <Route path="/category/create" element={<CategoryCreationView />} />
