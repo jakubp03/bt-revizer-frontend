@@ -108,7 +108,6 @@ export default function QuizDetailView() {
     }
 
     const formattedCreatedAt = new Date(selectedQuiz.createdAt).toLocaleDateString();
-    const formattedUpdatedAt = new Date(selectedQuiz.updatedAt).toLocaleDateString();
 
     const hasAttempts = attemptCount !== null && attemptCount > 0;
 
@@ -172,12 +171,6 @@ export default function QuizDetailView() {
                             <Calendar size={16} className="text-primary" />
                             <span className="text-muted-foreground">Created:</span>
                             <span className="font-medium">{formattedCreatedAt}</span>
-                        </div>
-
-                        <div className="flex items-center gap-2 text-sm">
-                            <Calendar size={16} className="text-muted-foreground" />
-                            <span className="text-muted-foreground">Updated:</span>
-                            <span className="font-medium">{formattedUpdatedAt}</span>
                         </div>
 
                         {attemptCount !== null && (

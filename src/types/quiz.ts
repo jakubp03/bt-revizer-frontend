@@ -27,7 +27,6 @@ export type QuizDetailed = {
     categories: Category[];
     questions: QuestionInfo[];
     createdAt: string;
-    updatedAt: string;
 };
 
 export type QuestionAttemptInfo = {
