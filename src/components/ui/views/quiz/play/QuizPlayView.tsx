@@ -163,7 +163,7 @@ export default function QuizPlayView({ quiz }: Props) {
                 onSubmit={handleSubmit}
                 onTimeUp={handleTimeUp}
             >
-                {currentQuestion && <QuestionRenderer question={currentQuestion} />}
+                {currentQuestion && <QuestionRenderer key={currentQuestion.id} question={currentQuestion} />}
             </QuizLayout>
 
             {isManualReviewOpen && (
