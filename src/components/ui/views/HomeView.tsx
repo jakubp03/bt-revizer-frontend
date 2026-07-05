@@ -5,13 +5,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/shadcn_ui/card";
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "@/components/ui/shadcn_ui/carousel";
 import LoadingSpinner from "@/components/ui/shared/LoadingSpinner";
 import QuizCard from "@/components/ui/shared/QuizCard";
 import api from "@/services/Api";
@@ -38,27 +31,6 @@ function formatTime(seconds: number): string {
     if (h > 0) return m > 0 ? `${h}h ${m}m` : `${h}h`;
     const s = seconds % 60;
     return m > 0 ? `${m}m` : `${s}s`;
-}
-
-// ─── Carousel ────────────────────────────────────────────────────────────────
-
-function QuizCarousel({ quizzes }: { quizzes: Quiz[] }) {
-    return (
-        <Carousel
-            opts={{ align: "start", dragFree: true }}
-            className="w-full"
-        >
-            <CarouselContent className="-ml-4">
-                {quizzes.map((quiz) => (
-                    <CarouselItem key={quiz.id} className="pl-4 basis-72">
-                        <QuizCard quiz={quiz} />
-                    </CarouselItem>
-                ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-        </Carousel>
-    );
 }
 
 // ─── Calendar Heatmap ────────────────────────────────────────────────────────
@@ -99,7 +71,7 @@ function HeatCell({
             <div
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
-                className={`h-5 w-5 cursor-default rounded-sm transition-opacity hover:opacity-80 ${getHeatLevel(count, maxCount)}`}
+                className={`h-6 w-6 cursor-default rounded-sm transition-opacity hover:opacity-80 ${getHeatLevel(count, maxCount)}`}
             />
             {hovered && (
                 <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded bg-popover px-2 py-1 text-[11px] text-popover-foreground shadow-md ring-1 ring-border">
@@ -141,12 +113,12 @@ function CalendarHeatmap({ activity }: { activity: Record<string, number> }) {
     return (
         <div className="w-fit space-y-2">
             <p className="text-xs font-medium text-muted-foreground">{monthLabel}</p>
-            <div className="grid gap-1 text-center text-[10px] text-muted-foreground grid-cols-[repeat(7,1.25rem)]">
+            <div className="grid gap-1 text-center text-[10px] text-muted-foreground grid-cols-[repeat(7,1.5rem)]">
                 {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
                     <div key={i}>{d}</div>
                 ))}
             </div>
-            <div className="grid gap-1 grid-cols-[repeat(7,1.25rem)]">{[...paddingCells, ...dayCells]}</div>
+            <div className="grid gap-1 grid-cols-[repeat(7,1.5rem)]">{[...paddingCells, ...dayCells]}</div>
             <div className="flex items-center gap-1.5 pt-0.5 text-[10px] text-muted-foreground">
                 <span>Less</span>
                 {HEAT_LEVELS.map((cls, i) => (
@@ -285,8 +257,10 @@ export default function HomeView() {
                             Quizzes you attempted in the past 7 days
                         </p>
                     </div>
-                    <div className="px-12">
-                        <QuizCarousel quizzes={recentQuizzes} />
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-4">
+                        {recentQuizzes.map((quiz) => (
+                            <QuizCard key={quiz.id} quiz={quiz} />
+                        ))}
                     </div>
                 </section>
             )}
@@ -297,7 +271,7 @@ export default function HomeView() {
                     <h2 className="text-lg font-semibold">Monthly Activity</h2>
                     <p className="text-sm text-muted-foreground">Quiz submissions this month</p>
                 </div>
-                <Card>
+                <Card className="w-fit px-6">
                     <CardContent className="pt-4">
                         <CalendarHeatmap activity={monthlyActivity} />
                     </CardContent>
