@@ -1,16 +1,20 @@
-import type { Category } from '@/types/category';
+import type { Category, CategoryStats } from '@/types/category';
 import { createSlice } from '@reduxjs/toolkit';
-import { createCategory, fetchAllCategories } from '../thunks/categoryThunks';
-export { createCategory, fetchAllCategories } from '../thunks/categoryThunks';
+import { createCategory, fetchAllCategories, fetchCategoryStats } from '../thunks/categoryThunks';
+export { createCategory, fetchAllCategories, fetchCategoryStats } from '../thunks/categoryThunks';
 
 type CategorySliceState = {
     categoryCollection: Category[];
     isLoadingCategories: boolean;
+    selectedCategoryStats: CategoryStats | null;
+    isLoadingStats: boolean;
 }
 
 const initialState: CategorySliceState = {
     categoryCollection: [],
-    isLoadingCategories: true
+    isLoadingCategories: true,
+    selectedCategoryStats: null,
+    isLoadingStats: false,
 }
 
 const categorySlice = createSlice({
@@ -22,6 +26,9 @@ const categorySlice = createSlice({
         },
         setIsLoadingCategories: (state, action) => {
             state.isLoadingCategories = action.payload
+        },
+        clearCategoryStats: (state) => {
+            state.selectedCategoryStats = null;
         },
     },
     extraReducers: (builder) => {
@@ -40,8 +47,20 @@ const categorySlice = createSlice({
             .addCase(createCategory.fulfilled, (state, action) => {
                 state.categoryCollection.push(action.payload);
             })
+            .addCase(fetchCategoryStats.pending, (state) => {
+                state.isLoadingStats = true;
+            })
+            .addCase(fetchCategoryStats.fulfilled, (state, action) => {
+                state.selectedCategoryStats = action.payload;
+                state.isLoadingStats = false;
+            })
+            .addCase(fetchCategoryStats.rejected, (state) => {
+                state.isLoadingStats = false;
+            })
     }
 });
+
+export const { addCategory, clearCategoryStats } = categorySlice.actions;
 
 export default categorySlice.reducer;
 

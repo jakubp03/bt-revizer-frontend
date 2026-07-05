@@ -43,3 +43,20 @@ export const createCategory = createAsyncThunk(
         }
     }
 );
+
+export const fetchCategoryStats = createAsyncThunk(
+    'category/fetchCategoryStats',
+    async (categoryId: string, { rejectWithValue }) => {
+        try {
+            const response = await api.get(`/attempt/statistics/byCategory/${categoryId}`);
+            return response.data;
+        } catch (error: unknown) {
+            console.error("Error fetching category stats", error);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const responseData = (error && typeof error === 'object' && 'response' in error)
+                ? (error as { response?: { data?: unknown } }).response?.data
+                : undefined;
+            return rejectWithValue(responseData || errorMessage);
+        }
+    }
+);
