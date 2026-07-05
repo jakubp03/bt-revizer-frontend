@@ -74,7 +74,7 @@ export default function QuizDetailView() {
         if (!selectedQuizStats) return [];
         return selectedQuizStats.questionAttempts.map((q, i) => ({
             question: `Q${i + 1}`,
-            med: q.medQuestionScorePercentage
+            avg: q.avgQuestionScorePercentage
         }));
     }, [selectedQuizStats]);
 
@@ -378,7 +378,7 @@ export default function QuizDetailView() {
                             <Card>
                                 <CardHeader>
                                     <CardTitle className="text-sm font-medium text-muted-foreground">
-                                        Median Score % per Question
+                                        Average Score % per Question
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
@@ -402,11 +402,11 @@ export default function QuizDetailView() {
                                                 tooltip: {
                                                     trigger: 'axis',
                                                     formatter: (params: any[]) =>
-                                                        `${params[0].name}<br/>Median Score: ${params[0].value}%`,
+                                                        `${params[0].name}<br/>Average Score: ${params[0].value}%`,
                                                 },
                                                 series: [{
                                                     type: 'bar',
-                                                    data: errorRateData.map(d => d.med),
+                                                    data: errorRateData.map(d => d.avg),
                                                     name: 'Score %',
                                                     itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] },
                                                     emphasis: { itemStyle: { color: primaryColor, borderRadius: [4, 4, 0, 0] } },

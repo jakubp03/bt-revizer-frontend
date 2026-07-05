@@ -37,7 +37,7 @@ export type QuestionAttemptInfo = {
     q3QuestionAttemptTime: number | null;
     maxQuestionAttemptTime: number | null;
     outliers: number[] | null;
-    medQuestionScorePercentage: number;
+    avgQuestionScorePercentage: number;
 };
 
 export type QuizStats = {
