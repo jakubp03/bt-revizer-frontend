@@ -19,7 +19,10 @@ export type QuestionFormBase = {
     clientId: string;
     questionText: string;
     points: number;
+    /** Local blob URL used for preview during quiz creation. */
     imagePreviewUrl: string | null;
+    /** Server-side filename returned by the image upload endpoint. */
+    imageFilename: string | null;
 };
 
 export type SingleChoiceForm = QuestionFormBase & {
@@ -92,6 +95,7 @@ export const createQuestion = (type: QuestionCreationType): QuestionForm => {
         questionText: '',
         points: 1,
         imagePreviewUrl: null,
+        imageFilename: null,
     };
     switch (type) {
         case 'SINGLE_CHOICE':

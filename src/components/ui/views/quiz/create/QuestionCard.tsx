@@ -1,9 +1,12 @@
 import { Button } from '@/components/ui/shadcn_ui/button';
 import { Input } from '@/components/ui/shadcn_ui/input';
+import ImageUploadBox from '@/components/ui/shared/ImageUploadBox';
+import { uploadImage } from '@/services/imageService';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Image, Minus, Plus, Trash2, X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { GripVertical, Minus, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import type {
     FlashcardForm,
     MatchingForm,
@@ -44,7 +47,8 @@ export default function QuestionCard({ question, index, onDelete, onChange }: Pr
         id: question.clientId,
     });
 
-    const imageRef = useRef<HTMLInputElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadingPreviewUrl, setUploadingPreviewUrl] = useState<string | null>(null);
 
     const [prevPoints, setPrevPoints] = useState(question.points);
     const [pointsInput, setPointsInput] = useState<string>(String(question.points));
@@ -61,11 +65,26 @@ export default function QuestionCard({ question, index, onDelete, onChange }: Pr
         zIndex: isDragging ? 10 : undefined,
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            onChange({ ...question, imagePreviewUrl: URL.createObjectURL(file) });
+    const handleFileSelect = async (file: File) => {
+        setIsUploading(true);
+        const localUrl = URL.createObjectURL(file);
+        setUploadingPreviewUrl(localUrl);
+        try {
+            const filename = await uploadImage(file);
+            if (question.imagePreviewUrl) URL.revokeObjectURL(question.imagePreviewUrl);
+            onChange({ ...question, imagePreviewUrl: localUrl, imageFilename: filename });
+        } catch {
+            toast.error('Failed to upload image. Please try again.');
+            URL.revokeObjectURL(localUrl);
+        } finally {
+            setUploadingPreviewUrl(null);
+            setIsUploading(false);
         }
+    };
+
+    const handleRemove = () => {
+        if (question.imagePreviewUrl) URL.revokeObjectURL(question.imagePreviewUrl);
+        onChange({ ...question, imagePreviewUrl: null, imageFilename: null });
     };
 
     const renderEditor = () => {
@@ -177,42 +196,13 @@ export default function QuestionCard({ question, index, onDelete, onChange }: Pr
                     </div>
 
                     {/* Image upload */}
-                    <div className="flex flex-col items-center gap-1.5 pt-0.5">
-                        {question.imagePreviewUrl ? (
-                            <div className="relative">
-                                <img
-                                    src={question.imagePreviewUrl}
-                                    alt="Preview"
-                                    className="h-20 w-20 rounded-lg object-cover"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        onChange({ ...question, imagePreviewUrl: null })
-                                    }
-                                    className="absolute -right-2 -top-2 rounded-full bg-card p-0.5 text-muted-foreground hover:text-destructive transition-colors hover:cursor-pointer"
-                                >
-                                    <X size={12} />
-                                </button>
-                            </div>
-                        ) : (
-                            <button
-                                type="button"
-                                onClick={() => imageRef.current?.click()}
-                                className="flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary hover:cursor-pointer"
-                            >
-                                <Image size={20} />
-                                <span className="text-xs">Image</span>
-                            </button>
-                        )}
-                        <input
-                            ref={imageRef}
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={handleImageChange}
-                        />
-                    </div>
+                    <ImageUploadBox
+                        className="pt-0.5"
+                        imagePreviewUrl={uploadingPreviewUrl ?? question.imagePreviewUrl}
+                        isUploading={isUploading}
+                        onFileSelect={handleFileSelect}
+                        onRemove={handleRemove}
+                    />
                 </div>
             )}
 

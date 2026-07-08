@@ -80,7 +80,7 @@ function buildPayload(
             const base = {
                 type: q.type,
                 questionText: q.questionText.trim(),
-                imagePath: null as string | null,
+                imagePath: q.imageFilename ?? null,
                 points: q.points,
             };
             switch (q.type) {

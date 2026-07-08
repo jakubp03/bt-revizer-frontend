@@ -3,6 +3,7 @@ import AuthHandler from "./components/handlers/AuthHandler";
 import InitializationHandler from "./components/handlers/InitializationHandler";
 import ProtectedRoute from "./components/handlers/ProtectedRoute";
 import Layout from "./components/ui/Layout";
+import { Toaster } from "./components/ui/shadcn_ui/sonner";
 import AttemptHistoryView from "./components/ui/views/AttemptHistoryView";
 import LoginView from "./components/ui/views/auth/LoginView";
 import RegisterView from "./components/ui/views/auth/RegisterView";
@@ -19,6 +20,7 @@ import QuizDetailView from "./components/ui/views/quiz/QuizDetailView";
 export default function App() {
   return (
     <AuthHandler> {/*provides acces to token and handles token auth*/}
+      <Toaster richColors position="top-right" />
       <Routes>
         <Route path="/login" element={<LoginView />} /> {/* login page where user gets redirected if not authorized */}
         <Route path="/register" element={<RegisterView />} />
