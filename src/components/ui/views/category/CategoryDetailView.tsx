@@ -1,8 +1,10 @@
+import { useTheme } from "@/components/theme-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn_ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/shadcn_ui/tabs";
 import BackButton from "@/components/ui/shared/BackButton";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { clearCategoryStats, fetchCategoryStats, selectCategoryById } from "@/store/slices/categorySlice";
+import { formatDuration } from '@/utils/timeUtils';
 import ReactECharts from "echarts-for-react";
 import { BookOpen, ChartNoAxesColumn, Clock, FolderOpen, History, RotateCcw, TrendingUp } from "lucide-react";
 import { useEffect, useMemo } from "react";
@@ -52,6 +54,14 @@ export default function CategoryDetailView() {
     const primaryColor = useMemo(() => {
         return getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#6366f1';
     }, []);
+
+    const { theme } = useTheme();
+    const echartsTheme = useMemo(() => {
+        const resolved = theme === "system"
+            ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            : theme;
+        return resolved === "dark" ? "dark" : undefined;
+    }, [theme]);
 
     if (!category) {
         return (
@@ -123,7 +133,7 @@ export default function CategoryDetailView() {
                                 <Clock size={16} className="text-primary" />
                                 <span className="text-muted-foreground">Avg time:</span>
                                 <span className="font-medium">
-                                    {Math.round(selectedCategoryStats.averageAttemptTime)}s
+                                    {formatDuration(Math.round(selectedCategoryStats.averageAttemptTime))}
                                 </span>
                             </div>
                         )}
@@ -134,7 +144,7 @@ export default function CategoryDetailView() {
                                 <span className="text-muted-foreground">Median time:</span>
                                 <span className="font-medium">
                                     {hasSufficientForMedian && selectedCategoryStats?.medianAttemptTime != null
-                                        ? `${Math.round(selectedCategoryStats.medianAttemptTime)}s`
+                                        ? `${formatDuration(Math.round(selectedCategoryStats.medianAttemptTime))}`
                                         : "insufficient data"}
                                 </span>
                             </div>
@@ -192,7 +202,7 @@ export default function CategoryDetailView() {
                         <TabsContent value="score-progress">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    <CardTitle className="text-sm font-medium text-foreground">
                                         Score % per Attempt
                                     </CardTitle>
                                 </CardHeader>
@@ -202,7 +212,9 @@ export default function CategoryDetailView() {
                                     ) : (
                                         <ReactECharts
                                             style={{ height: '384px' }}
+                                            theme={echartsTheme}
                                             option={{
+                                                backgroundColor: 'transparent',
                                                 grid: { top: 16, right: 16, bottom: 40, left: 55 },
                                                 xAxis: {
                                                     type: 'category',
@@ -219,8 +231,13 @@ export default function CategoryDetailView() {
                                                 },
                                                 tooltip: {
                                                     trigger: 'axis',
-                                                    formatter: (params: any[]) =>
-                                                        `Attempt ${params[0].name}<br/>Score: ${params[0].value}%`,
+                                                    axisPointer: {
+                                                        type: 'shadow'
+                                                    },
+                                                    formatter: (params: any[]) => {
+                                                        const color = params[0].color;
+                                                        return `Attempt ${params[0].name}<br/><span style="color: ${color};">●</span>Score: ${params[0].value}%`;
+                                                    }
                                                 },
                                                 series: [{
                                                     type: 'bar',
@@ -239,7 +256,7 @@ export default function CategoryDetailView() {
                         <TabsContent value="time-progress">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    <CardTitle className="text-sm font-medium text-foreground">
                                         Time Spent per Attempt
                                     </CardTitle>
                                 </CardHeader>
@@ -249,7 +266,9 @@ export default function CategoryDetailView() {
                                     ) : (
                                         <ReactECharts
                                             style={{ height: '384px' }}
+                                            theme={echartsTheme}
                                             option={{
+                                                backgroundColor: 'transparent',
                                                 grid: { top: 16, right: 16, bottom: 40, left: 55 },
                                                 xAxis: {
                                                     type: 'category',
@@ -264,8 +283,13 @@ export default function CategoryDetailView() {
                                                 },
                                                 tooltip: {
                                                     trigger: 'axis',
-                                                    formatter: (params: any[]) =>
-                                                        `Attempt ${params[0].name}<br/>Time: ${params[0].value}s`,
+                                                    axisPointer: {
+                                                        type: 'shadow'
+                                                    },
+                                                    formatter: (params: any[]) => {
+                                                        const color = params[0].color;
+                                                        return `Attempt ${params[0].name}<br/><span style="color: ${color};">●</span>Time: ${formatDuration(params[0].value)}`;
+                                                    }
                                                 },
                                                 series: [{
                                                     type: 'bar',

@@ -1,3 +1,4 @@
+import { useTheme } from "@/components/theme-provider";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { clearQuizAttempts, clearQuizStats, clearSelectedQuiz } from "@/store/slices/quizSlice";
 import { fetchQuizAttempts, fetchQuizById, fetchQuizStats } from "@/store/thunks/quizThunks";
@@ -75,7 +76,7 @@ export default function QuizDetailView() {
     const errorRateData = useMemo(() => {
         if (!selectedQuizStats) return [];
         return selectedQuizStats.questionAttempts.map((q, i) => ({
-            question: `Q${i + 1}`,
+            question: `Question ${i + 1}`,
             avg: q.avgQuestionScorePercentage
         }));
     }, [selectedQuizStats]);
@@ -91,7 +92,7 @@ export default function QuizDetailView() {
                 && q.maxQuestionAttemptTime !== null
             )
             .map((q, i) => ({
-                question: `Q${i + 1}`,
+                question: `Question ${i + 1}`,
                 min: q.minQuestionAttemptTime!,
                 q1: q.q1QuestionAttemptTime!,
                 med: q.medQuestionAttemptTime!,
@@ -104,6 +105,14 @@ export default function QuizDetailView() {
     const primaryColor = useMemo(() => {
         return getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#6366f1';
     }, []);
+
+    const { theme } = useTheme();
+    const echartsTheme = useMemo(() => {
+        const resolved = theme === "system"
+            ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            : theme;
+        return resolved === "dark" ? "dark" : undefined;
+    }, [theme]);
 
     if (isLoadingSelected || !selectedQuiz) {
         return <LoadingSpinner />;
@@ -286,7 +295,7 @@ export default function QuizDetailView() {
                         <TabsContent value="score-progress">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    <CardTitle className="text-sm font-medium text-foreground">
                                         Score % per Attempt
                                     </CardTitle>
                                 </CardHeader>
@@ -296,7 +305,9 @@ export default function QuizDetailView() {
                                     ) : (
                                         <ReactECharts
                                             style={{ height: '384px' }}
+                                            theme={echartsTheme}
                                             option={{
+                                                backgroundColor: 'transparent',
                                                 grid: { top: 16, right: 16, bottom: 40, left: 55 },
                                                 xAxis: {
                                                     type: 'category',
@@ -313,8 +324,13 @@ export default function QuizDetailView() {
                                                 },
                                                 tooltip: {
                                                     trigger: 'axis',
-                                                    formatter: (params: any[]) =>
-                                                        `Attempt ${params[0].name}<br/>Score: ${params[0].value}%`,
+                                                    axisPointer: {
+                                                        type: 'shadow'
+                                                    },
+                                                    formatter: (params: any[]) => {
+                                                        const color = params[0].color;
+                                                        return `Attempt ${params[0].name}<br/><span style="color: ${color};">●</span>Score: ${params[0].value}%`;
+                                                    },
                                                 },
                                                 series: [{
                                                     type: 'bar',
@@ -334,7 +350,7 @@ export default function QuizDetailView() {
                         <TabsContent value="time-progress">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    <CardTitle className="text-sm font-medium text-foreground">
                                         Time Spent per Attempt
                                     </CardTitle>
                                 </CardHeader>
@@ -344,7 +360,9 @@ export default function QuizDetailView() {
                                     ) : (
                                         <ReactECharts
                                             style={{ height: '384px' }}
+                                            theme={echartsTheme}
                                             option={{
+                                                backgroundColor: 'transparent',
                                                 grid: { top: 16, right: 16, bottom: 40, left: 55 },
                                                 xAxis: {
                                                     type: 'category',
@@ -359,8 +377,13 @@ export default function QuizDetailView() {
                                                 },
                                                 tooltip: {
                                                     trigger: 'axis',
-                                                    formatter: (params: any[]) =>
-                                                        `Attempt ${params[0].name}<br/>Time: ${params[0].value}s`,
+                                                    axisPointer: {
+                                                        type: 'shadow'
+                                                    },
+                                                    formatter: (params: any[]) => {
+                                                        const color = params[0].color;
+                                                        return `Attempt ${params[0].name}<br/><span style="color: ${color};">●</span>Time: ${formatDuration(params[0].value)}`;
+                                                    },
                                                 },
                                                 series: [{
                                                     type: 'bar',
@@ -380,7 +403,7 @@ export default function QuizDetailView() {
                         <TabsContent value="error-rate">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    <CardTitle className="text-sm font-medium text-foreground">
                                         Average Score % per Question
                                     </CardTitle>
                                 </CardHeader>
@@ -390,7 +413,9 @@ export default function QuizDetailView() {
                                     ) : (
                                         <ReactECharts
                                             style={{ height: '384px' }}
+                                            theme={echartsTheme}
                                             option={{
+                                                backgroundColor: 'transparent',
                                                 grid: { top: 16, right: 16, bottom: 30, left: 55 },
                                                 xAxis: {
                                                     type: 'category',
@@ -404,8 +429,13 @@ export default function QuizDetailView() {
                                                 },
                                                 tooltip: {
                                                     trigger: 'axis',
-                                                    formatter: (params: any[]) =>
-                                                        `${params[0].name}<br/>Average Score: ${params[0].value}%`,
+                                                    axisPointer: {
+                                                        type: 'shadow'
+                                                    },
+                                                    formatter: (params: any[]) => {
+                                                        const color = params[0].color;
+                                                        return `${params[0].name}<br/><span style="color: ${color};">●</span>Average Score: ${params[0].value}%`;
+                                                    }
                                                 },
                                                 series: [{
                                                     type: 'bar',
@@ -425,7 +455,7 @@ export default function QuizDetailView() {
                         <TabsContent value="time-per-question">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                                    <CardTitle className="text-sm font-medium text-foreground">
                                         Time per Question (Box Plot)
                                     </CardTitle>
                                 </CardHeader>
@@ -435,7 +465,9 @@ export default function QuizDetailView() {
                                     ) : (
                                         <ReactECharts
                                             style={{ height: '384px' }}
+                                            theme={echartsTheme}
                                             option={{
+                                                backgroundColor: 'transparent',
                                                 grid: { top: 16, right: 16, bottom: 30, left: 55 },
                                                 xAxis: {
                                                     type: 'category',
@@ -448,12 +480,21 @@ export default function QuizDetailView() {
                                                 },
                                                 tooltip: {
                                                     trigger: 'item',
+                                                    axisPointer: {
+                                                        type: 'shadow'
+                                                    },
                                                     formatter: (params: any) => {
                                                         if (params.seriesType === 'boxplot') {
                                                             // data[0] is the category index; actual values start at index 1
-                                                            return `${params.name}<br/>Max: ${params.data[5]}s<br/>Q3: ${params.data[4]}s<br/>Median: ${params.data[3]}s<br/>Q1: ${params.data[2]}s<br/>Min: ${params.data[1]}s`;
+                                                            return `${params.name}<br/>
+                                                            <span style="color: ${primaryColor};">●</span>Max: ${formatDuration(params.data[5])}<br/>
+                                                            <span style="color: ${primaryColor};">●</span>Q3: ${formatDuration(params.data[4])}<br/>
+                                                            <span style="color: ${primaryColor};">●</span>Median: ${formatDuration(params.data[3])}<br/>
+                                                            <span style="color: ${primaryColor};">●</span>Q1: ${formatDuration(params.data[2])}<br/>
+                                                            <span style="color: ${primaryColor};">●</span>Min: ${formatDuration(params.data[1])}`;
                                                         }
-                                                        return `${params.name}<br/>Outlier: ${params.data[1]}s`;
+                                                        return `${params.name}<br/>
+                                                        <span style="color: ${primaryColor};">●</span>Outlier: ${formatDuration(params.data[1])}`;
                                                     },
                                                 },
                                                 series: [
