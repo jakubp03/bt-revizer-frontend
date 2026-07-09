@@ -43,7 +43,7 @@ function QuestionImage({ filename }: { filename: string }) {
     /* Fixed-height uniform container — all images occupy the same space */
     return (
         <>
-            <div className="mt-3 flex h-48 w-full max-w-md items-center justify-center overflow-hidden rounded-lg bg-muted">
+            <div className="mt-3 flex h-48 w-full max-w-md items-center justify-center overflow-hidden rounded-lg">
                 {isLoading ? (
                     <Loader2 size={24} className="animate-spin text-muted-foreground" />
                 ) : blobUrl ? (
