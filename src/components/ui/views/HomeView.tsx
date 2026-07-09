@@ -254,7 +254,7 @@ export default function HomeView() {
                     <div>
                         <h2 className="text-lg font-semibold">Recent Quizzes</h2>
                         <p className="text-sm text-muted-foreground">
-                            Quizzes you attempted in the past 7 days
+                            Top 4 quizzes you attempted in the past 7 days
                         </p>
                     </div>
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-4">

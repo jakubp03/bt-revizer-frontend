@@ -315,7 +315,7 @@ export default function QuizCreationView() {
                 <div className="flex flex-col gap-3">
                     {/* Title */}
                     <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-muted-foreground">
+                        <label className="text-xs font-medium text-foreground">
                             Title <span className="text-destructive">*</span>
                         </label>
                         <Input
@@ -327,7 +327,7 @@ export default function QuizCreationView() {
 
                     {/* Description */}
                     <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-muted-foreground">Description</label>
+                        <label className="text-xs font-medium text-foreground">Description</label>
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -340,7 +340,7 @@ export default function QuizCreationView() {
                     {/* Icon + Time limit row */}
                     <div className="flex gap-3">
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-xs font-medium text-muted-foreground">
+                            <label className="text-xs font-medium text-foreground">
                                 Icon (emoji)
                             </label>
                             <div ref={emojiPickerRef} className="relative">
@@ -381,7 +381,7 @@ export default function QuizCreationView() {
                         </div>
 
                         <div className="flex flex-col gap-1.5 flex-1">
-                            <label className="text-xs font-medium text-muted-foreground">
+                            <label className="text-xs font-medium text-foreground">
                                 Time Limit
                             </label>
                             <div className="flex items-center gap-2">
@@ -414,7 +414,7 @@ export default function QuizCreationView() {
 
                     {/* Categories */}
                     <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-muted-foreground">Categories</label>
+                        <label className="text-xs font-medium text-foreground">Categories</label>
                         <div className="flex flex-wrap items-center gap-2">
                             {/* Selected category badges */}
                             {selectedCategoryIds.map((id) => {
@@ -531,10 +531,10 @@ export default function QuizCreationView() {
                     type="button"
                     onClick={() => setQuestionTypeMenuOpen((v) => !v)}
                     className={cn(
-                        'flex items-center gap-2 rounded-xl border-2 border-dashed px-6 py-3 text-sm font-medium transition-colors hover:cursor-pointer',
+                        'flex items-center gap-2 rounded-xl border-2 px-6 py-3 text-sm font-medium transition-colors hover:cursor-pointer',
                         questionTypeMenuOpen
                             ? 'border-primary bg-primary/5 text-primary'
-                            : 'border-border text-muted-foreground hover:border-primary hover:text-primary',
+                            : 'border-border bg-card text-foreground hover:border-primary hover:text-primary',
                     )}
                 >
                     <Plus size={18} />

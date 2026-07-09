@@ -50,7 +50,7 @@ export default function ReviewOverview({ review }: Props) {
             {/* Stats */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Results</CardTitle>
+                    <CardTitle className="text-sm font-medium text-foreground">Results</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -85,7 +85,7 @@ export default function ReviewOverview({ review }: Props) {
             {/* Question list */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Questions</CardTitle>
+                    <CardTitle className="text-sm font-medium text-foreground">Questions</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                     <ul className="flex flex-col">
@@ -109,8 +109,8 @@ export default function ReviewOverview({ review }: Props) {
                                         </div>
                                         <div className="flex items-center gap-4 ml-4 flex-shrink-0">
                                             <span className={`font-semibold text-xs ${status === 'correct' ? 'text-green-600 dark:text-green-400' :
-                                                    status === 'partial' ? 'text-yellow-600 dark:text-yellow-400' :
-                                                        'text-red-600 dark:text-red-400'
+                                                status === 'partial' ? 'text-yellow-600 dark:text-yellow-400' :
+                                                    'text-red-600 dark:text-red-400'
                                                 }`}>
                                                 {status === 'correct' ? 'correct' : status === 'partial' ? 'partially correct' : 'incorrect'}
                                             </span>

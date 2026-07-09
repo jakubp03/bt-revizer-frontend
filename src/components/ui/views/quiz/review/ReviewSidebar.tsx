@@ -20,7 +20,7 @@ function QuestionItem({ question, index }: { question: QuestionReview; index: nu
         <button
             type="button"
             onClick={() => dispatch(setReviewIndex(index))}
-            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${isActive ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted/50 text-foreground'}`}
+            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${isActive ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-primary/10 text-foreground'}`}
         >
             <span className="flex-shrink-0">
                 {status === 'correct' && <Check size={16} className="text-green-500" />}
@@ -43,18 +43,13 @@ export default function ReviewSidebar({ questions }: { questions: QuestionReview
                 <button
                     type="button"
                     onClick={() => dispatch(setReviewIndex(-1))}
-                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${isOverviewActive ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted/50 text-foreground'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${isOverviewActive ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-primary/10 text-foreground'}`}
                 >
                     <LayoutDashboard size={16} className="flex-shrink-0" />
                     <span>Overview</span>
                 </button>
             </div>
             <Separator />
-            <div className="border-b px-4 py-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Questions
-                </h3>
-            </div>
             <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto p-2">
                 {questions.map((q, i) => (
                     <QuestionItem key={q.questionId} question={q} index={i} />

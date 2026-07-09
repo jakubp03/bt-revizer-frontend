@@ -139,7 +139,7 @@ export default function QuizDetailView() {
             {/* Quiz Info Card */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Quiz Info</CardTitle>
+                    <CardTitle className="text-sm font-medium text-foreground">Quiz Info</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -159,7 +159,7 @@ export default function QuizDetailView() {
                             {selectedQuiz.timeLimit ? (
                                 <AlarmClock size={16} className="text-primary" />
                             ) : (
-                                <AlarmClockOff size={16} className="text-muted-foreground" />
+                                <AlarmClockOff size={16} className="text-primary" />
                             )}
                             <span className="text-muted-foreground">Time limit:</span>
                             <span className="font-medium">

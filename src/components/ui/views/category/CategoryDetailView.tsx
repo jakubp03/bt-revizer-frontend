@@ -76,7 +76,7 @@ export default function CategoryDetailView() {
             {/* Info card */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Category Info</CardTitle>
+                    <CardTitle className="text-sm font-medium text-foreground">Category Info</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -128,7 +128,7 @@ export default function CategoryDetailView() {
 
                         {hasAttempts && (
                             <div className="flex items-center gap-2 text-sm">
-                                <Clock size={16} className="text-muted-foreground" />
+                                <Clock size={16} className="text-primary" />
                                 <span className="text-muted-foreground">Median time:</span>
                                 <span className="font-medium">
                                     {hasSufficientForMedian && selectedCategoryStats?.medianAttemptTime != null
