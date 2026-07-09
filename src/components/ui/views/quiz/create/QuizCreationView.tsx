@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/shadcn_ui/button';
 import { Input } from '@/components/ui/shadcn_ui/input';
+import BackButton from '@/components/ui/shared/BackButton';
 import { cn } from '@/lib/utils';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { createQuiz } from '@/store/thunks/quizThunks';
@@ -22,7 +23,6 @@ import EmojiPicker, { Theme, type EmojiClickData } from 'emoji-picker-react';
 import {
     AlarmClock,
     AlarmClockOff,
-    ArrowLeft,
     BookOpen,
     Check,
     ChevronDown,
@@ -292,13 +292,7 @@ export default function QuizCreationView() {
         <div className="flex flex-col gap-6 p-6 pb-16 max-w-3xl mx-auto w-full">
             {/* Page header */}
             <div className="flex items-center gap-3">
-                <button
-                    type="button"
-                    onClick={() => navigate(-1)}
-                    className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground hover:cursor-pointer"
-                >
-                    <ArrowLeft size={20} />
-                </button>
+                <BackButton />
                 <div className="flex items-center gap-2">
                     <BookOpen size={22} className="text-primary" />
                     <div>

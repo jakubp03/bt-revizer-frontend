@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { clearQuizAttempts, clearQuizStats, clearSelectedQuiz } from "@/store/slices/quizSlice";
 import { fetchQuizAttempts, fetchQuizById, fetchQuizStats } from "@/store/thunks/quizThunks";
+import { formatDuration } from "@/utils/timeUtils";
 import ReactECharts from "echarts-for-react";
 import {
     AlarmClock,
@@ -19,6 +20,7 @@ import { Link, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "../../shadcn_ui/card";
 import { Separator } from "../../shadcn_ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../shadcn_ui/tabs";
+import BackButton from "../../shared/BackButton";
 import CategoryBadge from "../../shared/CategoryBadge";
 import LoadingSpinner from "../../shared/LoadingSpinner";
 
@@ -118,6 +120,7 @@ export default function QuizDetailView() {
             {/* Header */}
             <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
+                    <BackButton />
                     <span className="text-3xl">
                         {selectedQuiz.icon || <Lightbulb size={32} className="text-muted-foreground" />}
                     </span>
@@ -163,7 +166,7 @@ export default function QuizDetailView() {
                             )}
                             <span className="text-muted-foreground">Time limit:</span>
                             <span className="font-medium">
-                                {selectedQuiz.timeLimit ? `${selectedQuiz.timeLimit}s` : "None"}
+                                {selectedQuiz.timeLimit ? formatDuration(selectedQuiz.timeLimit) : "None"}
                             </span>
                         </div>
 

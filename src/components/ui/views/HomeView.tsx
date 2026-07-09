@@ -9,6 +9,7 @@ import LoadingSpinner from "@/components/ui/shared/LoadingSpinner";
 import QuizCard from "@/components/ui/shared/QuizCard";
 import api from "@/services/Api";
 import type { Quiz } from "@/types/quiz";
+import { formatDuration } from "@/utils/timeUtils";
 import { BookOpen, Clock, Trophy } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -22,16 +23,6 @@ type DashboardData = {
     monthlyActivity: Record<string, number>;
 };
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function formatTime(seconds: number): string {
-    if (seconds === 0) return "0m";
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    if (h > 0) return m > 0 ? `${h}h ${m}m` : `${h}h`;
-    const s = seconds % 60;
-    return m > 0 ? `${m}m` : `${s}s`;
-}
 
 // ─── Calendar Heatmap ────────────────────────────────────────────────────────
 
@@ -208,7 +199,7 @@ export default function HomeView() {
                         </CardAction>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-2xl font-bold">{formatTime(totalTimeSpent)}</p>
+                        <p className="text-2xl font-bold">{formatDuration(totalTimeSpent)}</p>
                         <p className="mt-1 text-xs text-muted-foreground">Past 7 days</p>
                     </CardContent>
                 </Card>

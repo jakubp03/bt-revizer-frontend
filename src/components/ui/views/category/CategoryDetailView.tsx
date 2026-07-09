@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn_ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/shadcn_ui/tabs";
+import BackButton from "@/components/ui/shared/BackButton";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { clearCategoryStats, fetchCategoryStats, selectCategoryById } from "@/store/slices/categorySlice";
 import ReactECharts from "echarts-for-react";
@@ -64,6 +65,7 @@ export default function CategoryDetailView() {
         <div className="flex flex-col gap-6 p-6">
             {/* Header */}
             <div className="flex items-center gap-3">
+                <BackButton />
                 <FolderOpen size={32} style={{ color: category.color }} className="shrink-0" />
                 <div>
                     <h1 className="text-3xl font-bold text-foreground">{category.name}</h1>

@@ -13,7 +13,7 @@ function QuestionItem({ question, index }: { question: QuestionInfo; index: numb
         <button
             type="button"
             onClick={() => dispatch(setCurrentQuestionIndex(index))}
-            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${isActive ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted/50 text-foreground'}`}
+            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${isActive ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-primary/10 text-foreground'}`}
         >
             <span className="flex-shrink-0">
                 {answerState === 'answered' && (
@@ -35,7 +35,7 @@ export default function QuizSidebar({ questions }: { questions: QuestionInfo[] }
     return (
         <aside className="flex h-full w-56 flex-col border-r bg-background">
             <div className="border-b px-4 py-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground">
                     Questions
                 </h3>
             </div>

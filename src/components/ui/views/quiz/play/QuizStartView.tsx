@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/shadcn_ui/button';
 import { Card, CardContent } from '@/components/ui/shadcn_ui/card';
 import { useAppSelector } from '@/store/hooks';
+import { formatDuration } from '@/utils/timeUtils';
 import {
     AlarmClock,
     AlarmClockOff,
@@ -33,7 +34,7 @@ export default function QuizStartView({ onStart }: { onStart: () => void }) {
                             {selectedQuiz.timeLimit ? (
                                 <>
                                     <AlarmClock size={16} className="text-primary" />
-                                    <span>{selectedQuiz.timeLimit}s</span>
+                                    <span>{formatDuration(selectedQuiz.timeLimit)}</span>
                                 </>
                             ) : (
                                 <>
