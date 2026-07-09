@@ -186,7 +186,7 @@ export default function CategoryDetailView() {
 
                 <TabsContent value="attempts">
                     <Card>
-                        <CardContent className="py-6">
+                        <CardContent className="py-1">
                             <p className="text-sm text-muted-foreground">No attempts yet</p>
                         </CardContent>
                     </Card>

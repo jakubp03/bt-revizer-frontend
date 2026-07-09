@@ -243,12 +243,12 @@ export default function QuizDetailView() {
                 {/* Previous Attempts Tab */}
                 <TabsContent value="attempts">
                     <Card>
-                        <CardContent className="py-6">
+                        <CardContent className="py-1">
                             {!selectedQuizAttempts || selectedQuizAttempts.length === 0 ? (
                                 <p className="text-sm text-muted-foreground">No attempts yet</p>
                             ) : (
                                 <div className="flex flex-col gap-1">
-                                    <div className="flex items-center justify-between px-4 pb-2 text-xs font-medium text-muted-foreground border-b">
+                                    <div className="flex items-center justify-between px-4 pb-2 text-m font-medium text-muted-foreground border-b">
                                         <span>Attempt</span>
                                         <div className="flex items-center gap-8">
                                             <span>Date</span>
