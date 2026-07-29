@@ -86,7 +86,7 @@ export default function AppSidebar() {
                     </Link>
                 ))}
 
-                {!isLoadingCategories && (
+                {(!isLoadingCategories && categoryCollection.length > 5) && (
                     <button
                         type="button"
                         onClick={() => setIsCategoryListCollapsed(!isCategoryListCollapsed)}
