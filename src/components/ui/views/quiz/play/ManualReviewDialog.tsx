@@ -17,8 +17,13 @@ export default function ManualReviewDialog({ questions, onComplete }: Props) {
     const manualResults = useAppSelector((s) => s.quizPlay.manualReviewResults);
 
     const manualQuestions = useMemo(
-        () => questions.filter((q) => q.type === 'TEXT_INPUT' && q.textConfig?.review === 'MANUAL'),
-        [questions],
+        () =>
+            questions.filter((q) => {
+                if (q.type !== 'TEXT_INPUT' || q.textConfig?.review !== 'MANUAL') return false;
+                const answer = textAnswers[q.id.toString()] ?? '';
+                return answer.trim().length > 0;
+            }),
+        [questions, textAnswers],
     );
 
     const [currentIndex, setCurrentIndex] = useState(0);

@@ -60,9 +60,11 @@ export default function QuizPlayView({ quiz }: Props) {
         questionStartTimeRef.current = now;
     }, [currentQuestionIndex, quiz.questions]);
 
-    const hasManualReviewQuestions = quiz.questions.some(
-        (q) => q.type === 'TEXT_INPUT' && q.textConfig?.review === 'MANUAL',
-    );
+    const hasManualReviewQuestions = quiz.questions.some((q) => {
+        if (q.type !== 'TEXT_INPUT' || q.textConfig?.review !== 'MANUAL') return false;
+        const answer = textBasedAnswers[q.id.toString()] ?? '';
+        return answer.trim().length > 0;
+    });
 
 
 
@@ -90,16 +92,22 @@ export default function QuizPlayView({ quiz }: Props) {
             timeSpent: getQuestionTimeSpent(questionId),
         }));
 
-        const textBased = Object.entries(textBasedAnswers).map(([questionId, submittedAnswer]) => {
-            const q = quiz.questions.find((qu) => qu.id.toString() === questionId);
-            const isManual = q?.textConfig?.review === 'MANUAL';
-            return {
-                questionId: Number(questionId),
-                submittedAnswer,
-                userMarkedCorrect: isManual ? (manualReviewResults[questionId] ?? null) : null,
-                timeSpent: getQuestionTimeSpent(questionId),
-            };
-        });
+        const textBased = quiz.questions
+            .filter((q) => q.type === 'TEXT_INPUT')
+            .map((q) => {
+                const questionId = q.id.toString();
+                const submittedAnswer = textBasedAnswers[questionId] ?? '';
+                const isManual = q.textConfig?.review === 'MANUAL';
+                const isBlankAnswer = submittedAnswer.trim().length === 0;
+                return {
+                    questionId: Number(questionId),
+                    submittedAnswer,
+                    userMarkedCorrect: isManual
+                        ? (isBlankAnswer ? false : (manualReviewResults[questionId] ?? null))
+                        : null,
+                    timeSpent: getQuestionTimeSpent(questionId),
+                };
+            });
 
         const matchBased = Object.entries(matchBasedAnswers).map(([questionId, pairs]) => ({
             questionId: Number(questionId),
