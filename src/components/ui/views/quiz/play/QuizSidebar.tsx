@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectAnswerState, setCurrentQuestionIndex } from '@/store/slices/quizPlaySlice';
 import type { QuestionInfo } from '@/types/quiz';
-import { Check, Circle, CircleDot } from 'lucide-react';
+import { Circle, CircleCheck, CircleDot } from 'lucide-react';
 
 function QuestionItem({ question, index }: { question: QuestionInfo; index: number }) {
     const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ function QuestionItem({ question, index }: { question: QuestionInfo; index: numb
         >
             <span className="flex-shrink-0">
                 {answerState === 'answered' && (
-                    <Check size={16} className="text-green-500" />
+                    <CircleCheck size={16} className="text-green-500" />
                 )}
                 {answerState === 'partial' && (
                     <CircleDot size={16} className="text-yellow-500" />
