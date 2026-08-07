@@ -7,6 +7,7 @@
 
 :root {
   --background: oklch(0.99 0.005 264);
+  /* --background: oklch(0.96 0.03 264); */
   --foreground: oklch(0.14 0.025 264);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.14 0.025 264);
@@ -50,7 +51,8 @@
   --warning-foreground: oklch(0.20 0 0);
 
   --radius: 0.625rem;
-  --sidebar: oklch(0.96 0.03 264);
+  /* --sidebar: oklch(0.96 0.03 264); */
+  --sidebar: oklch(0.99 0.005 264);
   --sidebar-foreground: oklch(0.14 0.025 264);
   --sidebar-primary: oklch(0.46 0.22 264);
   --sidebar-primary-foreground: oklch(0.98 0 0);

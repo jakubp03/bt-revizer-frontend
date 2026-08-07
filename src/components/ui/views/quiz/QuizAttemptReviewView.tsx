@@ -10,7 +10,7 @@ import ReviewSidebar from './review/ReviewSidebar';
 import ReviewTopBar from './review/ReviewTopBar';
 
 export default function QuizAttemptReviewView() {
-    const { id, attemptId } = useParams<{ id: string; attemptId: string }>();
+    const { attemptId } = useParams<{ id: string; attemptId: string }>();
     const dispatch = useAppDispatch();
     const { reviewData, isLoading, currentIndex } = useAppSelector((s) => s.attemptReview);
 
@@ -34,7 +34,7 @@ export default function QuizAttemptReviewView() {
 
     return (
         <div className="flex h-screen flex-col overflow-hidden">
-            <ReviewTopBar review={reviewData} quizId={id ?? ''} />
+            <ReviewTopBar review={reviewData} />
             <div className="flex flex-1 overflow-hidden">
                 <ReviewSidebar questions={reviewData.questions} />
                 <main className="flex-1 overflow-y-auto p-6">
