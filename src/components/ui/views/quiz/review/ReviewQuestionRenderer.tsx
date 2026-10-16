@@ -263,7 +263,7 @@ export default function ReviewQuestionRenderer({ question }: { question: Questio
                 {question.imagePath && (
                     <img
                         src={question.imagePath}
-                        alt="Question"
+                        alt="Question image"
                         className="mt-3 max-h-64 rounded-lg object-contain"
                     />
                 )}

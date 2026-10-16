@@ -7,7 +7,7 @@ import {
     startQuizPlay,
 } from '@/store/slices/quizPlaySlice';
 import type { QuizDetailed } from '@/types/quiz';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../../shared/LoadingSpinner';
 import ManualReviewDialog from './ManualReviewDialog';
@@ -17,6 +17,15 @@ import QuizLayout from './QuizLayout';
 type Props = {
     quiz: QuizDetailed;
 };
+
+function shuffleArray<T>(items: T[]): T[] {
+    const shuffled = [...items];
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+        [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+    }
+    return shuffled;
+}
 
 export default function QuizPlayView({ quiz }: Props) {
     const dispatch = useAppDispatch();
@@ -35,6 +44,19 @@ export default function QuizPlayView({ quiz }: Props) {
     const questionTimeSpentRef = useRef<Record<string, number>>({});
     const questionStartTimeRef = useRef<number>(0);
     const currentQuestionIdRef = useRef<string | null>(null);
+    const playQuestions = useMemo(
+        () => quiz.questions.map((question) => {
+            if (!['SINGLE_CHOICE', 'MULTIPLE_CHOICE', 'TRUE_FALSE'].includes(question.type)) {
+                return question;
+            }
+
+            return {
+                ...question,
+                choiceOptions: shuffleArray(question.choiceOptions),
+            };
+        }),
+        [quiz.questions],
+    );
 
     // Initialize play state on mount
     useEffect(() => {
@@ -44,7 +66,7 @@ export default function QuizPlayView({ quiz }: Props) {
         };
     }, [dispatch]);
 
-    const currentQuestion = quiz.questions[currentQuestionIndex];
+    const currentQuestion = playQuestions[currentQuestionIndex];
 
     // Accumulate time spent whenever the user moves to a different question
     useEffect(() => {
@@ -56,11 +78,11 @@ export default function QuizPlayView({ quiz }: Props) {
             questionTimeSpentRef.current[prevQuestionId] = (questionTimeSpentRef.current[prevQuestionId] ?? 0) + elapsed;
         }
 
-        currentQuestionIdRef.current = quiz.questions[currentQuestionIndex]?.id.toString() ?? null;
+        currentQuestionIdRef.current = playQuestions[currentQuestionIndex]?.id.toString() ?? null;
         questionStartTimeRef.current = now;
-    }, [currentQuestionIndex, quiz.questions]);
+    }, [currentQuestionIndex, playQuestions]);
 
-    const hasManualReviewQuestions = quiz.questions.some((q) => {
+    const hasManualReviewQuestions = playQuestions.some((q) => {
         if (q.type !== 'TEXT_INPUT' || q.textConfig?.review !== 'MANUAL') return false;
         const answer = textBasedAnswers[q.id.toString()] ?? '';
         return answer.trim().length > 0;
@@ -92,7 +114,7 @@ export default function QuizPlayView({ quiz }: Props) {
             timeSpent: getQuestionTimeSpent(questionId),
         }));
 
-        const textBased = quiz.questions
+        const textBased = playQuestions
             .filter((q) => q.type === 'TEXT_INPUT')
             .map((q) => {
                 const questionId = q.id.toString();
@@ -122,7 +144,7 @@ export default function QuizPlayView({ quiz }: Props) {
             textBasedAnswers: textBased,
             matchBasedAttemptAnswer: matchBased,
         };
-    }, [idBasedAnswers, textBasedAnswers, matchBasedAnswers, flashcardAnswers, manualReviewResults, quiz, startTime]);
+    }, [idBasedAnswers, textBasedAnswers, matchBasedAnswers, flashcardAnswers, manualReviewResults, playQuestions, quiz.id, startTime]);
 
     const submitToBackend = useCallback(async () => {
         dispatch(setIsSubmitting(true));
@@ -166,7 +188,7 @@ export default function QuizPlayView({ quiz }: Props) {
     return (
         <>
             <QuizLayout
-                questions={quiz.questions}
+                questions={playQuestions}
                 timeLimit={quiz.timeLimit}
                 onSubmit={handleSubmit}
                 onTimeUp={handleTimeUp}
@@ -176,7 +198,7 @@ export default function QuizPlayView({ quiz }: Props) {
 
             {isManualReviewOpen && (
                 <ManualReviewDialog
-                    questions={quiz.questions}
+                    questions={playQuestions}
                     onComplete={handleManualReviewComplete}
                 />
             )}
