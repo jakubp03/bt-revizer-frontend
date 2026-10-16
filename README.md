@@ -2,6 +2,12 @@
 
 React single-page application for creating and taking quizzes, organizing them into categories, and reviewing attempts and learning statistics. The frontend is maintained in a separate repository from the backend.
 
+The backend is maintained in a separate repository: [bt-revizer-backend](https://github.com/jakubp03/bt-revizer-backend).
+
+## Architecture Diagram Of The Whole App
+
+![Architecture diagram](docs/architecture%20diagram.png)
+
 ## Technology
 
 - React 19 and TypeScript
@@ -64,6 +70,10 @@ parent-directory/
 
 Follow the backend repository's instructions to configure and start the full application with Docker Compose. Run Docker Compose from the backend repository, where `compose.yaml` is located.
 
+## API Documentation
+
+See [the full API documentation](docs/api-doc.md) for endpoint details, request and response formats, and authentication requirements.
+
 ## Project Structure
 
 ```text
@@ -79,3 +89,5 @@ src/
 ├── types/                  # TypeScript types
 └── utils/                  # Shared utility functions
 ```
+
+
